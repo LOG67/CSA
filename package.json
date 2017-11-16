@@ -1,0 +1,20 @@
+{
+  "name": "csa",
+  "version": "0.0.1",
+  "description": "Our web app uses IBM Watson to generate sentiment analysis reports on companies of the user's choice within a specific date range.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LOG67/CSA.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LOG67/CSA/issues"
+  },
+  "homepage": "https://github.com/LOG67/CSA#readme"
+}
