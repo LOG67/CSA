@@ -22,6 +22,7 @@
   "dependencies": {
     "express": "^4.16.2",
     "firebase": "^4.6.2",
+    "firebaseui": "^2.5.1",
     "react": "^16.1.1",
     "react-dom": "^16.1.1"
   },
