@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom'
 import * as firebase from 'firebase'
 import * as firebaseui from 'firebaseui'
 import config from '../../config'
+import SearchBar from './SearchBar.jsx'
+import SideBar from './SideBar.jsx'
+import SearchResults from './SearchResults.jsx'
 
 
 class App extends Component {
@@ -73,22 +76,27 @@ class App extends Component {
                                 <a class="nav-link" href="">Nav item again</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">One more nav</a>
+                                <a class="nav-link" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">One
+                                    more nav</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">Another nav item</a>
+                                <a class="nav-link" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">Another
+                                    nav item</a>
                             </li>
                         </ul>
 
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">Nav item again</a>
+                                <a class="nav-link" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">Nav
+                                    item again</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">One more nav</a>
+                                <a class="nav-link" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">One
+                                    more nav</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">Another nav item</a>
+                                <a class="nav-link" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">Another
+                                    nav item</a>
                             </li>
                         </ul>
                     </nav>
@@ -96,26 +104,35 @@ class App extends Component {
                     <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
                         <h1>Dashboard</h1>
 
+
                         <section class="row text-center placeholders">
                             <div class="col-6 col-sm-3 placeholder">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail"></img>
-                                    <h4>Label</h4>
-                                    <div class="text-muted">Something else</div>
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs="
+                                     width="200" height="200" class="img-fluid rounded-circle"
+                                     alt="Generic placeholder thumbnail"></img>
+                                <h4>Label</h4>
+                                <div class="text-muted">Something else</div>
                             </div>
                             <div class="col-6 col-sm-3 placeholder">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIABAADcgwAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail"></img>
-                                    <h4>Label</h4>
-                                    <span class="text-muted">Something else</span>
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIABAADcgwAAACwAAAAAAQABAAACAkQBADs="
+                                     width="200" height="200" class="img-fluid rounded-circle"
+                                     alt="Generic placeholder thumbnail"></img>
+                                <h4>Label</h4>
+                                <span class="text-muted">Something else</span>
                             </div>
                             <div class="col-6 col-sm-3 placeholder">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail"></img>
-                                    <h4>Label</h4>
-                                    <span class="text-muted">Something else</span>
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs="
+                                     width="200" height="200" class="img-fluid rounded-circle"
+                                     alt="Generic placeholder thumbnail"></img>
+                                <h4>Label</h4>
+                                <span class="text-muted">Something else</span>
                             </div>
                             <div class="col-6 col-sm-3 placeholder">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIABAADcgwAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail"></img>
-                                    <h4>Label</h4>
-                                    <span class="text-muted">Something else</span>
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIABAADcgwAAACwAAAAAAQABAAACAkQBADs="
+                                     width="200" height="200" class="img-fluid rounded-circle"
+                                     alt="Generic placeholder thumbnail"></img>
+                                <h4>Label</h4>
+                                <span class="text-muted">Something else</span>
                             </div>
                         </section>
 
@@ -250,7 +267,10 @@ class App extends Component {
                     </main>
                 </div>
             </div>
-
+            <SideBar results={['a', 'b', 'c']}/>
+            <SearchBar/>
+            <SearchResults/>
+            <div id="firebaseui-auth-container"></div>
             </body>
 
             /*
