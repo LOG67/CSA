@@ -17,6 +17,11 @@ class App extends Component {
       <div>
         <div>
           CSA: Company Sentiment Analyzer
+            <SearchBar
+                name={this.state.name}
+                fromDate={this.state.fromDate}
+                toDate={this.state.toDate}
+            />
         </div>
         <div id="firebaseui-auth-container"></div>
       </div>
