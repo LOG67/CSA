@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import * as firebase from 'firebase'
 import * as firebaseui from 'firebaseui'
 import config from '../../config'
+import SearchBar from './SearchBar.jsx'
 
 
 class App extends Component {
@@ -17,11 +18,7 @@ class App extends Component {
       <div>
         <div>
           CSA: Company Sentiment Analyzer
-            <SearchBar
-                name={this.state.name}
-                fromDate={this.state.fromDate}
-                toDate={this.state.toDate}
-            />
+            <SearchBar/>
         </div>
         <div id="firebaseui-auth-container"></div>
       </div>
