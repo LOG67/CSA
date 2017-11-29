@@ -16,7 +16,7 @@ class App extends Component {
     return (
       <div>
         <div>
-          Welcome to React!
+          CSA: Company Sentiment Analyzer
         </div>
         <div id="firebaseui-auth-container"></div>
       </div>
