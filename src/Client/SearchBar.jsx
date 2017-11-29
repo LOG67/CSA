@@ -36,7 +36,6 @@ export default class SearchBar extends Component {
     }*/
 
     render() {
-        const { submitting } = this.props
 
         return (
             <form onSubmit={e => this.handleSubmit(e)}>
