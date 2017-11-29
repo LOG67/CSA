@@ -4,6 +4,8 @@ import * as firebase from 'firebase'
 import * as firebaseui from 'firebaseui'
 import config from '../../config'
 import SearchBar from './SearchBar.jsx'
+import SideBar from './SideBar.jsx'
+import SearchResults from './SearchResults.jsx'
 
 
 class App extends Component {
@@ -18,7 +20,10 @@ class App extends Component {
       <div>
         <div>
           CSA: Company Sentiment Analyzer
-            <SearchBar/>
+            <SideBar results={['a','b','c']}/>
+            <SearchBar />
+            <SearchResults />
+
         </div>
         <div id="firebaseui-auth-container"></div>
       </div>
