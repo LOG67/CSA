@@ -7,7 +7,7 @@
     "dev": "webpack-dev-server --env.dev",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node dist/server.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "json-loader": "^0.5.7",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
   }
