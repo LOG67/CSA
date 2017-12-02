@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/LOG67/CSA#readme",
   "dependencies": {
+    "axios": "^0.17.1",
     "express": "^4.16.2",
     "firebase": "^4.6.2",
     "firebaseui": "^2.5.1",
