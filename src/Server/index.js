@@ -13,10 +13,10 @@ app.get('/', (req, res) => {
 })
 
 app.get('/company/:company/startdate/:startdate/enddate/:enddate', (req, res) => {
-  googleFinance.companyNews({
+  googleFinance.historical({
     symbol: 'NASDAQ:GOOGL',
-    // from: '2014-01-01',
-    // to: '2014-12-31'
+    from: '2014-01-01',
+    to: '2014-12-31'
   }).then(news => {
     res.send(news)
     // crawl(news, text => res.send(striptags(text)))

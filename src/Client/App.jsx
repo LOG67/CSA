@@ -10,6 +10,17 @@ import SearchResults from './SearchResults.jsx'
 
 class App extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            userID: '',
+            query: {},
+            histories: [],
+            result: {}
+        }
+    }
+
+
     componentDidMount() {
         init()
         auth()
@@ -75,3 +86,41 @@ function init() {
 
 const root = document.getElementById('app')
 ReactDOM.render(<App/>, root)
+
+
+/*
+
+State: {
+    userID: t.String,
+    query: t.Query,
+    result: t.Result,
+    histories: [t.History]
+}
+
+History: {
+    query: t.Query,
+    result: t.Result,
+}
+
+Query: {
+    companySymbol: t.String,
+    startDate: t.String,
+    endDate: t.String,
+}
+
+Result: {
+    quotes: [t.Quote],
+    tone: t.Tone
+}
+
+Tone: {
+    ??
+}
+
+Quote: {
+    date: t.String,
+    open: t.Number,
+    close: t.Number,
+    volume: t.Number
+}
+*/
