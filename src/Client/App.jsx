@@ -16,15 +16,19 @@ class App extends Component {
     }
 
     render() {
+
         return (
+            <body>
+            <header>
+                <h1>CSA</h1>
+            </header>
             <div class="container-fluid">
                 <div class="row">
                     <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
                         <SideBar results={['a', 'b', 'c']}/>
                     </nav>
                     <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-                        <h1>CSA</h1>
-                        <div id="firebaseui-auth-container"></div>
+                        {/*-- <div id="firebaseui-auth-container"></div>*/}
                         <section class="row text-center placeholders">
                             <SearchBar/>
                             <SearchResults/>
@@ -32,12 +36,11 @@ class App extends Component {
                     </main>
                 </div>
             </div>
-
+            </body>
 
         )
     }
 }
-
 
 function auth() {
 
