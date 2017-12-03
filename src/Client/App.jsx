@@ -27,6 +27,14 @@ class App extends Component {
     auth()
   }
 
+  update(query) {
+    this.setState({ ...this.state, query: query})
+  }
+
+  historyClick(index) {
+    this.update();
+  }
+
 
   render() {
 
@@ -67,12 +75,30 @@ class App extends Component {
             <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
               {/*-- <div id="firebaseui-auth-container"></div>*/}
               <section class="row text-center placeholders">
-                <SearchBar/>
-                <SearchResults/>
+                <div className="col">
+                  <div className="row">
+                    <SearchBar
+                      query={ this.state.query}
+                      updater={(newQuery) => this.update(newQuery)}/>
+                  </div>
+                  <hr />
+                  <div className="row text-center">
+                    <SearchResults/>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                  </div>
+                </div>
               </section>
             </main>
           </div>
         </div>
+
       </div>
     )
   }
