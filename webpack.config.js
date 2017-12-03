@@ -1,3 +1,4 @@
+var nodeExternals = require('webpack-node-externals');
 module.exports = options => {
   return [
     {
@@ -6,6 +7,7 @@ module.exports = options => {
         __dirname: false,
         __filename: false,
       },
+      externals: [nodeExternals()],
       entry: './src/Server/index.js',
       output: {
         path: __dirname + '/dist',
