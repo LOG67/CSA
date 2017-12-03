@@ -89,7 +89,7 @@ class App extends Component {
                   <div className="row text-center">
                     <SearchResults
                         results={this.state.result}
-                        /*updater={(oldResults) => this.historySearch(oldResults)}*//>
+                        updater={(oldResults) => this.historySearch(oldResults)}/>
                     <h1>TEST!!!!!</h1>
                     <h1>TEST!!!!!</h1>
                     <h1>TEST!!!!!</h1>
