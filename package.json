@@ -21,6 +21,8 @@
   "homepage": "https://github.com/LOG67/CSA#readme",
   "dependencies": {
     "axios": "^0.17.1",
+    "chart.js": "^2.7.1",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
     "firebase": "^4.6.2",
     "firebase-admin": "^5.5.1",

@@ -4,9 +4,11 @@ import moment from 'moment'
 import googleFinance from 'google-finance'
 import axios from 'axios'
 import * as admin from "firebase-admin"
-import adminsdk from "../../adminsdk.json"
+import cheerio from 'cheerio'
 
+import adminsdk from "../../adminsdk.json"
 import companies from '../../companies'
+import ibmconfig from '../../ibmconfig'
 
 // firebase stuff
 admin.initializeApp({
@@ -61,14 +63,31 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
             result = {...result, quotes: cleanQuotes(financialRes)}
             return googleFinance.companyNews({symbol})
         }).then(newsRes => {
+            let allText = newsRes.map(n => {return n.summary}).reduce((sum, n) => {return sum + '\n' + n}, '')
+            result = {...result, allText}
             db.ref('users/' + decodedToken.uid + '/histories').push().set(result)
-            result = {...result, newsRes}
             res.send(result).end()
+            
+            // console.log(a)
+            // axios(watsonReqConf(a)).then(({data}) => {
+            //     res.status(404).send("hello").end()
+            //     console.log("here")
+            //     if (!data || !data.document_tone) {
+            //         res.status(404).send(data).end()
+            //         return
+            //     }
+            //     console.log(data)
+            //     result = data
+            //     res.send(result).end()
+            // }).catch(reason => {
+            //     console.log(reason)
+            //     res.status(404).send(reason).end()
+            // })
         }).catch(reason => {
             res.status(404).send(reason).end()
         })
     }).catch(error => {
-        res.status(403).send("Not Authorized!").end()
+        res.status(403).send(error).end()
     })
 })
 
@@ -80,15 +99,30 @@ function cleanQuotes(quotes) {
     return quotes.map(({date, high, low, volume}) => ({date, high, low, volume}))
 }
 
-// function crawl(news, callback) {
-//     var links = news.map(n => axios.get(n.link))
-//     axios.all(links).then(results => {
-//         var res = "";
-//         results.forEach(r => res += r.data)
-//         console.log(results)
-//         callback("hello")
-//
-//     }).catch(error => {
-//         console.log(error);
-//     });
-// }
+function crawl(news, callback) {
+    var links = news.map(n => axios.get(n.link))
+    axios.all(links).then(results => {
+        var res = "";
+        results.forEach(r => {
+            const $ = cheerio.load(r.data)
+            res += $('p').text()
+        })
+        callback(res)
+    }).catch(error => {
+        console.log(error)
+        callback()
+    })
+}
+
+function watsonReqConf(text) {
+    return {
+        url: imbconfig.url,
+        method: 'post',
+        // headers: {'Content-Type': 'application/json'},
+        auth: {
+            username: imbconfig.username,
+            password: imbconfig.password,
+        },
+        data: JSON.stringify({text})
+    }
+}

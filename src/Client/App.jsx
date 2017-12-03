@@ -76,7 +76,7 @@ class App extends Component {
               <SideBar results={['a', 'b', 'c']}/>
             </nav>
             <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-              {/*-- <div id="firebaseui-auth-container"></div>*/}
+              <div id="firebaseui-auth-container"></div>
               <section class="row text-center placeholders">
                 <div className="col">
                   <div className="row">
@@ -142,13 +142,12 @@ function auth() {
     // The start method will wait until the DOM is loaded.
     // ui.start('#firebaseui-auth-container', uiConfig)
 
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
         if (user) {
-            alert(user.uid)
-            firebase.auth().currentUser.getToken(true).then(function(idToken) {
+            user.getIdToken(true).then(idToken => {
                 console.log(idToken)
             }).catch(function(error) {
-                // Handle error
+                console.log(error)
             });
         }
     })
