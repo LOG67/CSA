@@ -22,25 +22,29 @@ class App extends Component {
     }
 
 
-  componentDidMount() {
-    init()
-    auth()
-  }
+    componentDidMount() {
+        init()
+        auth()
+    }
 
-  update(query) {
-    this.setState({ ...this.state, query: query})
-  }
+    update(query) {
+        this.setState({ ...this.state, query: query})
+    }
 
-  historyClick(index) {
-    this.update();
-  }
+    historySearch(results) {
+        this.setState({ ...this.state, results: results})
+    }
+
+    historyClick(index) {
+        this.update();
+    }
 
 
-  render() {
+    render() {
 
     return (
       <div>
-        <nav className="navbar navbar-expand-md navbar-dark navbar-fixed-top bg-dark">
+        <nav className="navbar navbar-expand-md navbar-dark navbar-fixed-top bg-info">
           <a className="navbar-brand" href="#">CSA</a>
           <button className="navbar-toggler d-lg-none" type="button" data-toggle="collapse"
                   data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
@@ -61,8 +65,7 @@ class App extends Component {
               </li>
             </ul>
             <form className="form-inline mt-2 mt-md-0">
-              <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"></input>
-              <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              <button className="btn btn-dark btn-lg" type="login">Login</button>
             </form>
           </div>
         </nav>
@@ -78,20 +81,31 @@ class App extends Component {
                 <div className="col">
                   <div className="row">
                     <SearchBar
-                      query={ this.state.query}
+                      query={this.state.query}
                       updater={(newQuery) => this.update(newQuery)}/>
                   </div>
                   <hr />
                   <div className="row text-center">
-                    <SearchResults/>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
+                    <SearchResults
+                        results={this.state.result}
+                        updater={(oldResults) => this.historySearch(oldResults)}/>
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
                   </div>
                 </div>
               </section>
@@ -101,7 +115,7 @@ class App extends Component {
 
       </div>
     )
-  }
+    }
 }
 
 
@@ -149,8 +163,7 @@ ReactDOM.render(
     <App/>
     , root)
 
-    /*
-
+/*
     State: {
     userID: t.String,
     query: t.Query,
@@ -159,29 +172,29 @@ ReactDOM.render(
 }
 
 History: {
-query: t.Query,
-result: t.Result,
+    query: t.Query,
+    result: t.Result,
 }
 
 Query: {
-companySymbol: t.String,
-startDate: t.String,
-endDate: t.String,
+    companySymbol: t.String,
+    startDate: t.String,
+    endDate: t.String,
 }
 
 Result: {
-quotes: [t.Quote],
-tone: t.Tone
+    quotes: [t.Quote],
+    tone: t.Tone
 }
 
 Tone: {
-??
+    ??
 }
 
 Quote: {
-date: t.String,
-open: t.Number,
-close: t.Number,
-volume: t.Number
+    date: t.String,
+    open: t.Number,
+    close: t.Number,
+    volume: t.Number
 }
 */
