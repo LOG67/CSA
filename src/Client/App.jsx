@@ -86,7 +86,7 @@ class App extends Component {
                   </div>
                   <hr />
                   <div className="row text-center">
-                    <SearchResults className="list-unstyled text-center" />
+                    <SearchResults
                         results={this.state.result}
                         updater={(oldResults) => this.historySearch(oldResults)}/>
                     <h1>These are results!!!!!</h1><br />
