@@ -25,7 +25,7 @@ export default class SearchBar extends Component {
 
     handleChangeToDate(e) {
         this.setState({toDate: e.target.value})
-        e.preventDefault()
+        e.preventDefault()`q`
     }
 
 
