@@ -10,32 +10,37 @@ import SearchResults from './SearchResults.jsx'
 
 class App extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      userID: '',
-      query: {},
-      histories: [],
-      result: {}
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            userID: '',
+            query: {},
+            histories: [],
+            result: {}
+        }
     }
-  }
 
 
-  componentDidMount() {
-    init()
-    auth()
-  }
+    componentDidMount() {
+        init()
+        auth()
+    }
 
-  update(query) {
-    this.setState({...this.state, query: query})
-  }
+    update(query) {
+        this.setState({ ...this.state, query: query})
+    }
 
-  historyClick(index) {
-    this.update();
-  }
+    historySearch(results) {
+        this.setState({ ...this.state, results: results})
+    }
+
+    historyClick(index) {
+        this.update();
+    }
 
 
-  render() {
+    render() {
 
     return (
       <div>
@@ -71,19 +76,28 @@ class App extends Component {
             <nav className="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
               <SideBar results={['a', 'b', 'c']}/>
             </nav>
-            <main role="main" className="col-sm-9 ml-sm-auto col-md-10 pt-3">
+            <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
               {/*-- <div id="firebaseui-auth-container"></div>*/}
-              <section className="row text-center placeholders">
+              <section class="row text-center placeholders">
                 <div className="col">
                   <div className="row">
                     <SearchBar
-                      query={this.state.query}
+                      query={ this.state.query}
                       updater={(newQuery) => this.update(newQuery)}/>
                   </div>
-                  <hr/>
+                  <hr />
                   <div className="row text-center">
-                    <SearchResults/>
-                    <h1>Here is Results</h1>
+                    <SearchResults
+                        results={this.state.result}
+                        updater={(oldResults) => this.historySearch(oldResults)}/>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
+                    <h1>TEST!!!!!</h1>
                   </div>
                 </div>
               </section>
@@ -93,82 +107,81 @@ class App extends Component {
 
       </div>
     )
-  }
+    }
 }
 
 
 function auth() {
 
-  var uiConfig = {
-    signInOptions: [
-      // Leave the lines as is for the providers you want to offer your users.
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    ],
-    callbacks: {
-      signInSuccess: function (currentUser, credential, redirectUrl) {
-        // Do something.
-        // Return type determines whether we continue the redirect automatically
-        // or whether we leave that to developer to handle.
-        return false
-      }
+    var uiConfig = {
+        signInOptions: [
+            // Leave the lines as is for the providers you want to offer your users.
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        ],
+        callbacks: {
+            signInSuccess: function (currentUser, credential, redirectUrl) {
+                // Do something.
+                // Return type determines whether we continue the redirect automatically
+                // or whether we leave that to developer to handle.
+                return false
+            }
+        }
     }
-  }
 
-  // Initialize the FirebaseUI Widget using Firebase.
-  var ui = new firebaseui.auth.AuthUI(firebase.auth())
-  // The start method will wait until the DOM is loaded.
-  ui.start('#firebaseui-auth-container', uiConfig)
+    // Initialize the FirebaseUI Widget using Firebase.
+    var ui = new firebaseui.auth.AuthUI(firebase.auth())
+    // The start method will wait until the DOM is loaded.
+    ui.start('#firebaseui-auth-container', uiConfig)
 
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      alert(user.uid)
-    }
-  })
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            alert(user.uid)
+        }
+    })
 }
 
 function init() {
-  firebase.initializeApp(config)
+    firebase.initializeApp(config)
 }
 
 const root = document.getElementById('app')
 ReactDOM.render(
-  <App/>
-  , root)
+    <App/>
+    , root)
 
 /*
-
-State: {
-userID: t.String,
-query: t.Query,
-result: t.Result,
-histories: [t.History]
+    State: {
+    userID: t.String,
+    query: t.Query,
+    result: t.Result,
+    histories: [t.History]
 }
 
 History: {
-query: t.Query,
-result: t.Result,
+    query: t.Query,
+    result: t.Result,
 }
 
 Query: {
-companySymbol: t.String,
-startDate: t.String,
-endDate: t.String,
+    companySymbol: t.String,
+    startDate: t.String,
+    endDate: t.String,
 }
 
 Result: {
-quotes: [t.Quote],
-tone: t.Tone
+    quotes: [t.Quote],
+    tone: t.Tone
 }
 
 Tone: {
-??
+    ??
 }
 
 Quote: {
-date: t.String,
-open: t.Number,
-close: t.Number,
-volume: t.Number
+    date: t.String,
+    open: t.Number,
+    close: t.Number,
+    volume: t.Number
 }
 */

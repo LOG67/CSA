@@ -2,30 +2,30 @@ import React, {PropTypes, Component } from 'react'
 //import companies from './companies.js'
 
 export default class SearchBar extends Component {
-    constructor() {
-        super();
-        this.state = {name: '', fromDate: '', toDate: ''};
+    constructor(props) {
+        super(props);
+        this.state = {name: props.query.companySymbol, fromDate: props.query.from, toDate: props.query.to};
     }
 
     handleSubmit(e) {
+        props.updater({symbol: this.state.name, from: this.state.fromDate, to: this.state.toDate})
         alert(this.state.name)
-        event.preventDefault()
-
+        e.preventDefault()
     }
 
     handleChangeName(e) {
         this.setState({name: e.target.value})
-        event.preventDefault()
+        e.preventDefault()
     }
 
     handleChangeFromDate(e) {
         this.setState({fromDate: e.target.value})
-        event.preventDefault()
+        e.preventDefault()
     }
 
     handleChangeToDate(e) {
         this.setState({toDate: e.target.value})
-        event.preventDefault()
+        e.preventDefault()
     }
 
 
@@ -36,7 +36,7 @@ export default class SearchBar extends Component {
     }*/
 
     render() {
-
+        this.props.updater();
         return (
             <form onSubmit={e => this.handleSubmit(e)}>
                 <input type="text"
