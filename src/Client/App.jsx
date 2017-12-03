@@ -10,6 +10,24 @@ import SearchResults from './SearchResults.jsx'
 
 class App extends Component {
 
+<<<<<<< HEAD
+=======
+    constructor(props) {
+        super(props)
+        this.state = {
+            userID: '',
+            query: {},
+            histories: [],
+            result: {}
+        }
+    }
+
+
+    componentDidMount() {
+        init()
+        auth()
+    }
+>>>>>>> 37209feb08bfc532532d401359c6e911c788b67c
 
 
   componentDidMount() {
@@ -104,6 +122,48 @@ function init() {
 }
 
 const root = document.getElementById('app')
+<<<<<<< HEAD
 ReactDOM.render(
   <App/>
   , root)
+=======
+ReactDOM.render(<App/>, root)
+
+
+/*
+
+State: {
+    userID: t.String,
+    query: t.Query,
+    result: t.Result,
+    histories: [t.History]
+}
+
+History: {
+    query: t.Query,
+    result: t.Result,
+}
+
+Query: {
+    companySymbol: t.String,
+    startDate: t.String,
+    endDate: t.String,
+}
+
+Result: {
+    quotes: [t.Quote],
+    tone: t.Tone
+}
+
+Tone: {
+    ??
+}
+
+Quote: {
+    date: t.String,
+    open: t.Number,
+    close: t.Number,
+    volume: t.Number
+}
+*/
+>>>>>>> 37209feb08bfc532532d401359c6e911c788b67c
