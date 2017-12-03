@@ -10,24 +10,16 @@ import SearchResults from './SearchResults.jsx'
 
 class App extends Component {
 
-<<<<<<< HEAD
-=======
-    constructor(props) {
-        super(props)
-        this.state = {
-            userID: '',
-            query: {},
-            histories: [],
-            result: {}
-        }
-    }
 
-
-    componentDidMount() {
-        init()
-        auth()
+  constructor(props) {
+    super(props)
+    this.state = {
+      userID: '',
+      query: {},
+      histories: [],
+      result: {}
     }
->>>>>>> 37209feb08bfc532532d401359c6e911c788b67c
+  }
 
 
   componentDidMount() {
@@ -62,7 +54,7 @@ class App extends Component {
             </ul>
             <form className="form-inline mt-2 mt-md-0">
               <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"></input>
-                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
           </div>
         </nav>
@@ -122,12 +114,10 @@ function init() {
 }
 
 const root = document.getElementById('app')
-<<<<<<< HEAD
+
 ReactDOM.render(
   <App/>
   , root)
-=======
-ReactDOM.render(<App/>, root)
 
 
 /*
@@ -166,4 +156,3 @@ Quote: {
     volume: t.Number
 }
 */
->>>>>>> 37209feb08bfc532532d401359c6e911c788b67c
