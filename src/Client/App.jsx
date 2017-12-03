@@ -22,21 +22,25 @@ class App extends Component {
     }
 
 
-  componentDidMount() {
-    init()
-    auth()
-  }
+    componentDidMount() {
+        init()
+        auth()
+    }
 
-  update(query) {
-    this.setState({ ...this.state, query: query})
-  }
+    update(query) {
+        this.setState({ ...this.state, query: query})
+    }
 
-  historyClick(index) {
-    this.update();
-  }
+    historySearch(results) {
+        this.setState({ ...this.state, results: results})
+    }
+
+    historyClick(index) {
+        this.update();
+    }
 
 
-  render() {
+    render() {
 
     return (
       <div>
@@ -83,7 +87,9 @@ class App extends Component {
                   </div>
                   <hr />
                   <div className="row text-center">
-                    <SearchResults/>
+                    <SearchResults
+                        results={this.state.result}
+                        updater={(oldResults) => this.historySearch(oldResults)}/>
                     <h1>TEST!!!!!</h1>
                     <h1>TEST!!!!!</h1>
                     <h1>TEST!!!!!</h1>
@@ -101,7 +107,7 @@ class App extends Component {
 
       </div>
     )
-  }
+    }
 }
 
 
@@ -144,8 +150,7 @@ ReactDOM.render(
     <App/>
     , root)
 
-    /*
-
+/*
     State: {
     userID: t.String,
     query: t.Query,
@@ -154,29 +159,29 @@ ReactDOM.render(
 }
 
 History: {
-query: t.Query,
-result: t.Result,
+    query: t.Query,
+    result: t.Result,
 }
 
 Query: {
-companySymbol: t.String,
-startDate: t.String,
-endDate: t.String,
+    companySymbol: t.String,
+    startDate: t.String,
+    endDate: t.String,
 }
 
 Result: {
-quotes: [t.Quote],
-tone: t.Tone
+    quotes: [t.Quote],
+    tone: t.Tone
 }
 
 Tone: {
-??
+    ??
 }
 
 Quote: {
-date: t.String,
-open: t.Number,
-close: t.Number,
-volume: t.Number
+    date: t.String,
+    open: t.Number,
+    close: t.Number,
+    volume: t.Number
 }
 */
