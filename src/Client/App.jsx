@@ -81,13 +81,15 @@ class App extends Component {
                 <div className="col">
                   <div className="row">
                     <SearchBar
-                      results={this.state.result}
-                      updater={(oldResults) => this.historySearch(oldResults)}/>
+                      query={this.state.query}
+                      updater={(newQuery) => this.update(newQuery)}/>
                   </div>
                   <hr />
                   <div className="row text-center">
 
-                    <SearchResults className="list-unstyled text-center" />
+                    <SearchResults
+                      results={this.state.result}
+                      updater={(oldResults) => this.historySearch(oldResults)}/>
                     <h1>These are results!!!!!</h1><br />
                     <h1>These are results!!!!!</h1><br />
                     <h1>These are results!!!!!</h1><br />
