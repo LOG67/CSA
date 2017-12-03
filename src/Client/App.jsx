@@ -44,7 +44,7 @@ class App extends Component {
 
     return (
       <div>
-        <nav className="navbar navbar-expand-md navbar-dark navbar-fixed-top bg-dark">
+        <nav className="navbar navbar-expand-md navbar-dark navbar-fixed-top bg-info">
           <a className="navbar-brand" href="#">CSA</a>
           <button className="navbar-toggler d-lg-none" type="button" data-toggle="collapse"
                   data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
@@ -65,8 +65,7 @@ class App extends Component {
               </li>
             </ul>
             <form className="form-inline mt-2 mt-md-0">
-              <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"></input>
-              <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              <button className="btn btn-dark btn-lg" type="login">Login</button>
             </form>
           </div>
         </nav>
@@ -87,17 +86,26 @@ class App extends Component {
                   </div>
                   <hr />
                   <div className="row text-center">
-                    <SearchResults
-                        results={this.state.result}
-                        updater={(oldResults) => this.historySearch(oldResults)}/>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
-                    <h1>TEST!!!!!</h1>
+                    <SearchResults className="list-unstyled text-center" />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+                    <h1>These are results!!!!!</h1><br />
+
+
                   </div>
                 </div>
               </section>
