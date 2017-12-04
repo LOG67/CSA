@@ -60,7 +60,8 @@ export default class SearchBar extends Component {
                                     onChange={e => this.handleChangeToDate(e)}
                                     placeholder='To MM/DD/YYYY'/>
                                 </div>
-                                <button className="btn btn-dark text-center" type="submit">Search</button>
+                                <button className="btn btn-dark text-center ml-md-4 mr-md-2" type="submit"
+                                >Search</button>
                             </div>
                         </form>
                     )

@@ -8,16 +8,11 @@ export default class NavBar extends Component {
     }
 
     render() {
-        var BackgroundPath = "./images/background_image.jpg"
-        var sectionStyle = {
-            width: "100%",
-            height: "60px",
-            backgroundImage: `url(${BackgroundPath})`,
-        }
+
         return (
             <nav
-                className="navbar navbar-dark navbar-fixed-top"
-                style={sectionStyle}>
+                className="navbar navbar-light navbar-fixed-top"
+                style={{backgroundColor:"#ff8533"}}>
                 <a
                     className="navbar-brand"
                     href="#">
@@ -26,7 +21,7 @@ export default class NavBar extends Component {
                 <form>
                     <label>{'Hello, ' + this.props.username}</label>
                     <button
-                        className="btn btn-warning mb-3 mb-md-0 ml-md-3"
+                        className="btn btn-dark mb-3 mb-md-0 ml-md-4 mr-md-1"
                         type="submit"
                         onClick={(e) => this.onLogoutPressed(e)}>
                         Logout

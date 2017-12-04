@@ -58,15 +58,16 @@ class App extends Component {
                     username={this.state.username}
                     onLogoutPressed={() => this.onLogoutPressed}
                 />
-                <div className="container-fluid ">
+                <div className="container-fluid">
                     <div className="row">
-                        <div className="col col-sm-3 col-md-2">
-                            <div className=" bg-dark text-light sidebar">
-                                <h5 className="text-center text mt-md-3">History</h5>
-                                <SideBar results={this.state.histories}/>
+                        <div className="col col-md-2">
+                            <div className=" sidebar-light sidebar mt-md-3"
+                                 style={{backgroundColor:"#ff8533"}}>
+                                <h5 className="text-center text  ">History</h5>
+                                <SideBarresults={this.state.histories}/>
                             </div>
                         </div>
-                        <div className="col bg-light text-dark">
+                        <div className="col col-sm-9 ml-sm-auto col-md-10 bg-light text-dark">
                             <div className=" mt-md-3">
                             <SearchBar
                                 query={this.state.query}
