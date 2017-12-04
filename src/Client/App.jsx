@@ -72,7 +72,8 @@ class App extends Component {
                     onLogoutPressed={() => this.onLogoutPressed}
                 />
                 <div>
-                    <ErrowBar showError={false}/>
+                    <ErrowBar
+                        errorArray={this.state.errors}/>
                 </div>
                 <div className="container-fluid">
                     <div className="row">
