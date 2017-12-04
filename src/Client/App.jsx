@@ -9,6 +9,7 @@ import SearchBar from './SearchBar.jsx'
 import SideBar from './SideBar.jsx'
 import SearchResult from './SearchResult.jsx'
 import NavBar from './NavBar.jsx'
+import ErrowBar from "./ErrorBar.jsx"
 
 import dummyData from './DummyData.json'
 
@@ -70,19 +71,25 @@ class App extends Component {
                     username={this.state.username}
                     onLogoutPressed={() => this.onLogoutPressed}
                 />
+                <div>
+                <ErrowBar />
+                </div>
                 <div className="container-fluid">
                     <div className="row">
-                        <div className="col">
-                            <div className="bg-dark text-light sidebar">
-                                <h5 className="text-center text">History</h5>
+                        <div className="col col-md-2">
+                            <div className=" sidebar-light sidebar mt-md-3"
+                                 style={{backgroundColor:"#ff8533"}}>
+                                <h5 className="text-center text  ">History</h5>
                                 <SideBar results={this.state.histories}/>
                             </div>
                         </div>
-                        <div class="col">
+                        <div className="col col-sm-9 ml-sm-auto col-md-10 bg-light text-dark">
+                            <div className=" mt-md-3">
                             <SearchBar
                                 query={this.state.query}
                                 onSubmitPressed={newQuery => this.onSubmitPressed(newQuery)}
                             />
+                            </div>
                             <hr/>
                             <div className="row">
                                 <SearchResult
