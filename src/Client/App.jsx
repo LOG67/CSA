@@ -64,7 +64,7 @@ class App extends Component {
                             <div className=" sidebar-light sidebar mt-md-3"
                                  style={{backgroundColor:"#ff8533"}}>
                                 <h5 className="text-center text  ">History</h5>
-                                <SideBarresults={this.state.histories}/>
+                                <SideBar results={this.state.histories}/>
                             </div>
                         </div>
                         <div className="col col-sm-9 ml-sm-auto col-md-10 bg-light text-dark">
