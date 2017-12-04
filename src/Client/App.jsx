@@ -2,6 +2,9 @@ import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import * as firebase from 'firebase'
 import * as firebaseui from 'firebaseui'
+import axios from 'axios'
+import _ from 'lodash'
+
 import config from '../../config.js'
 import SearchBar from './SearchBar.jsx'
 import SideBar from './SideBar.jsx'
@@ -11,6 +14,8 @@ import ErrowBar from "./ErrorBar.jsx"
 
 import dummyData from './DummyData.json'
 
+const SERVER_URL = 'http://localhost:3000/'
+
 class App extends Component {
     constructor(props) {
         super(props)
@@ -18,15 +23,15 @@ class App extends Component {
             userID: '',
             username: 'Mehran',
             query: {},
-            histories: dummyData.histories,
-            result: dummyData.result,
-            errors: []
+            histories: [],
+            result: {},
+            errors: [],
         }
     }
 
 
     componentDidMount() {
-        init()
+        init(this)
         auth()
     }
 
@@ -37,15 +42,19 @@ class App extends Component {
         console.log('here')
     }
 
-    onSubmitPressed(query, errors) {
-        this.setState({ ...this.state, query, errors })
+    onQueryChanged(query) {
+        this.setState({ ...this.state, query})
+    }
+
+    onSubmitPressed(errors) {
+        this.setState({ ...this.state, errors })
         if (errors.length > 0) {
             return
         }
 
         firebase.auth().currentUser.getIdToken(true).then(idToken => {
-            let url = SERVER_URL + 'query/symbol/' + query.companySymbol + '/from/' +
-                query.from + '/to/' + query.to + '/token/' + idToken
+            let url = SERVER_URL + 'query/symbol/' + this.state.query.companySymbol + '/from/' +
+                this.state.query.from + '/to/' + this.state.query.to + '/token/' + idToken
             return axios.get(url)
         }).then(res => {
             this.setState({...this.state, result: res.data})
@@ -54,13 +63,12 @@ class App extends Component {
         })
     }
 
-    historySearch(results) {
-        this.setState({...this.state, results: results})
+    onHistorySelected(index) {        
+        const result = this.state.histories[index]
+        const query = result.query
+        this.setState({ ...this.state, result, query })
     }
 
-    historyClick(index) {
-        this.update();
-    }
 
     // {/*-- <div id="firebaseui-auth-container"></div>*/}
 
@@ -81,14 +89,18 @@ class App extends Component {
                             <div className=" sidebar-light sidebar mt-md-3"
                                 style={{backgroundColor:"#ff8533"}}>
                                 <h5 className="text-center text  ">History</h5>
-                                <SideBar results={this.state.histories}/>
+                                <SideBar
+                                    histories={this.state.histories}
+                                    onHistorySelected={i => this.onHistorySelected(i)}
+                                />
                             </div>
                         </div>
                         <div className="col col-sm-9 ml-sm-auto col-md-10 bg-light text-dark">
                             <div className=" mt-md-3">
                             <SearchBar
                                 query={this.state.query}
-                                onSubmitPressed={(newQuery, errors) => this.onSubmitPressed(newQuery, errors)}
+                                onSubmitPressed={(errors) => this.onSubmitPressed(errors)}
+                                onQueryChanged={newQuery => this.onQueryChanged(newQuery)}
                             />
                             </div>
                             <hr/>
@@ -116,51 +128,52 @@ function auth() {
         ],
         callbacks: {
             signInSuccess: function (currentUser, credential, redirectUrl) {
-                // Do something.
-                // Return type determines whether we continue the redirect automatically
-                // or whether we leave that to developer to handle.
                 return false
             }
-        }
+        },
     }
-
 
     // Initialize the FirebaseUI Widget using Firebase.
     var ui = new firebaseui.auth.AuthUI(firebase.auth())
     // The start method will wait until the DOM is loaded.
     // ui.start('#firebaseui-auth-container', uiConfig)
+}
 
+function init(app) {
+    firebase.initializeApp(config)
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
-            user.getIdToken(true).then(idToken => {
-                console.log(idToken)
-            }).catch(function(error) {
-                console.log(error)
-            });
+            firebase.database().ref(`users/${user.uid}/histories`).on('value', snap => {
+                const historyObjects = snap.val() || {}
+                const unsortedHistories = _.values(historyObjects)
+                const histories = _.sortBy(unsortedHistories, ['date']).reverse()
+                app.setState({ ...app.state, histories }, () => {
+                    if (_.isEmpty(app.state.result) && !_.isEmpty(app.state.histories)) {
+                        app.setState({ ...app.state, result: histories[0],
+                            query: histories[0].query })
+                    }
+                })
+            })
         }
     })
 }
 
-function init() {
-    firebase.initializeApp(config)
-}
-
 const root = document.getElementById('app')
-ReactDOM.render(
-    <App/>
-    , root)
+ReactDOM.render(<App/>, root)
 
-    /*
-    State: {
-    userID: t.String,
-    query: t.Query,
-    result: t.Result,
-    histories: [t.History],
-}
-
-History: {
+/*
+State: {
+userID: t.String,
 query: t.Query,
 result: t.Result,
+histories: [t.Result],
+}
+
+Result: {
+query: t.Query,
+quotes: [t.Quote],
+tone: t.Tone,
+date: t.String,
 }
 
 Query: {
@@ -169,17 +182,12 @@ startDate: t.String,
 endDate: t.String,
 }
 
-Result: {
-quotes: [t.Quote],
-tone: t.Tone,
-}
-
 Tone: {
 ??
 }
 
 Quote: {
-date: t.String,
+qDate: t.String,
 open: t.Number,
 close: t.Number,
 volume: t.Number,
