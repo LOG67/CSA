@@ -5,66 +5,59 @@ import companies from '../../companies.js'
 
 
 export default class SearchBar extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            name: props.query.companySymbol,
-            fromDate: props.query.from,
-            toDate: props.query.to,
-        }
-    }
 
     handleSubmit(e) {
+        let { companySymbol, to, from, onSubmitPressed } = this.props.query
         // first validate the inputs
         var errors = []
-        if (!companies.includes(this.state.name)) {
+        if (!companies.includes(companySymbol)) {
             errors.push('Provide a valid company symbol!')
         }
-        if (!moment(this.state.fromDate).isValid()) {
+        if (!moment(from).isValid()) {
             errors.push('Provide a valid start date!')
         }
-        if (!moment(this.state.toDate).isValid()) {
+        if (!moment(to).isValid()) {
             errors.push('Provide a valid end date!')
         }
-        this.props.onSubmitPressed({
-            companySymbol: this.state.name,
-            from: this.state.fromDate,
-            to: this.state.toDate,
-        }, errors)
+        onSubmitPressed(errors)
         e.preventDefault()
     }
 
     handleChangeName(e) {
-        this.setState({ ...this.state, name: e.target.value.toUpperCase() })
+        let companySymbol = e.target.value.toUpperCase()
+        this.props.onQueryChanged({ ...this.props.query, companySymbol })
     }
 
     handleChangeFromDate(e) {
-        this.setState({ ...this.state, fromDate: e.target.value })
+        let from = e.target.value
+        this.props.onQueryChanged({ ...this.props.query, from })
     }
 
     handleChangeToDate(e) {
-        this.setState({ ...this.state, toDate: e.target.value })
+        let to = e.target.value
+        this.props.onQueryChanged({ ...this.props.query, to })
     }
 
     render() {
+        let { companySymbol, from, to } = this.props.query
         return (
             <form onSubmit={e => this.handleSubmit(e)}>
                 <div className="form-row">
                         <input className="form-control col-4"
                             type="text"
-                            value={this.state.name}
+                            value={companySymbol}
                             onChange={e => this.handleChangeName(e)}
                             placeholder='Company Name'/>
 
                         <input className="form-control col"
                             type="text"
-                            value={this.state.fromDate}
+                            value={from}
                             onChange={e => this.handleChangeFromDate(e)}
                             placeholder='From MM/DD/YYYY'/>
 
                         <input className="form-control col"
                             type="text"
-                            value={this.state.toDate}
+                            value={to}
                             onChange={e => this.handleChangeToDate(e)}
                             placeholder='To MM/DD/YYYY'/>
 

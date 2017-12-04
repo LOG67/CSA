@@ -42,15 +42,19 @@ class App extends Component {
         console.log('here')
     }
 
-    onSubmitPressed(query, errors) {
-        this.setState({ ...this.state, query, errors })
+    onQueryChanged(query) {
+        this.setState({ ...this.state, query})
+    }
+
+    onSubmitPressed(errors) {
+        this.setState({ ...this.state, errors })
         if (errors.length > 0) {
             return
         }
 
         firebase.auth().currentUser.getIdToken(true).then(idToken => {
-            let url = SERVER_URL + 'query/symbol/' + query.companySymbol + '/from/' +
-                query.from + '/to/' + query.to + '/token/' + idToken
+            let url = SERVER_URL + 'query/symbol/' + this.state.query.companySymbol + '/from/' +
+                this.state.query.from + '/to/' + this.state.query.to + '/token/' + idToken
             return axios.get(url)
         }).then(res => {
             this.setState({...this.state, result: res.data})
@@ -59,13 +63,14 @@ class App extends Component {
         })
     }
 
-    historySearch(results) {
-        this.setState({...this.state, results: results})
+    onHistorySelected(index) {
+        console.log(this.state.histories)
+        console.log(index)
+        const result = this.state.histories[index]
+        const query = result.query
+        this.setState({ ...this.state, result, query })
     }
 
-    historyClick(index) {
-        this.update();
-    }
 
     // {/*-- <div id="firebaseui-auth-container"></div>*/}
 
@@ -85,14 +90,18 @@ class App extends Component {
                             <div className=" sidebar-light sidebar mt-md-3"
                                 style={{backgroundColor:"#ff8533"}}>
                                 <h5 className="text-center text  ">History</h5>
-                                <SideBar results={this.state.histories}/>
+                                <SideBar
+                                    histories={this.state.histories}
+                                    onHistorySelected={i => this.onHistorySelected(i)}
+                                />
                             </div>
                         </div>
                         <div className="col col-sm-9 ml-sm-auto col-md-10 bg-light text-dark">
                             <div className=" mt-md-3">
                             <SearchBar
                                 query={this.state.query}
-                                onSubmitPressed={(newQuery, errors) => this.onSubmitPressed(newQuery, errors)}
+                                onSubmitPressed={(errors) => this.onSubmitPressed(errors)}
+                                onQueryChanged={newQuery => this.onQueryChanged(newQuery)}
                             />
                             </div>
                             <hr/>
