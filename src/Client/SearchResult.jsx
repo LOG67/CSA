@@ -1,29 +1,15 @@
 import React, { Component } from 'react'
-import Chart from 'chart.js'
+import { Line } from 'react-chartjs-2'
 import moment from 'moment'
 
 export default class SearchResult extends Component {
-    componentDidMount() {
-        drawChart(this.props.result.quotes)
-    }
-
     render() {
-        return (
-            <canvas id="chart" />
-        )
-    }
-}
-
-function drawChart(quotes) {
-    let ctx = document.getElementById("chart")
-    let options = generateChartOptions()
-    let labels = quotes.map(q => moment(q.date).format('MMM D'))
-    let openQuotesData = quotes.map(q => q.open)
-    let closeQuotesData = quotes.map(q => q.close)
-    let config = {
-        type: 'line',
-        options,
-        data: {
+        let quotes = this.props.result.quotes
+        let options = generateChartOptions()
+        let labels = quotes.map(q => moment(q.date).format('MMM D'))
+        let openQuotesData = quotes.map(q => q.open)
+        let closeQuotesData = quotes.map(q => q.close)
+        let data = {
             labels,
             datasets: [
                 {
@@ -41,9 +27,16 @@ function drawChart(quotes) {
                     data: closeQuotesData,
                 },
             ],
-        },
+        }
+
+        return (
+            <Line
+                options={options}
+                labels={labels}
+                data={data}
+            />
+        )
     }
-    new Chart(ctx, config)
 }
 
 function generateChartOptions() {

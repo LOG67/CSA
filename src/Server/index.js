@@ -29,6 +29,7 @@ app.get('/', (req, res) => {
 
 app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
 
+    console.log(req.url)
     let companySymbol = req.params.symbol || ''
     let from = req.params.from || ''
     let to = req.params.to || ''

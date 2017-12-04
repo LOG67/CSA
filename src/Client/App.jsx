@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import * as firebase from 'firebase'
 import * as firebaseui from 'firebaseui'
+import axios from 'axios'
 
 import config from '../../config.js'
 import SearchBar from './SearchBar.jsx'
@@ -10,6 +11,8 @@ import SearchResult from './SearchResult.jsx'
 import NavBar from './NavBar.jsx'
 
 import dummyData from './DummyData.json'
+
+const SERVER_URL = 'http://localhost:3000/'
 
 class App extends Component {
 
@@ -39,10 +42,19 @@ class App extends Component {
 
     onSubmitPressed(query) {
         this.setState({...this.state, query: query})
+        firebase.auth().currentUser.getIdToken(true).then(idToken => {
+            let url = SERVER_URL + 'query/symbol/' + query.companySymbol + '/from/' +
+                query.from + '/to/' + query.to + '/token/' + idToken
+            return axios.get(url)
+        }).then(res => {
+            this.setState({...this.state, result: res.data})            
+        }).catch(function(error) {
+            console.log(error)
+        })
     }
 
-    historySearch(results) {
-        this.setState({...this.state, results: results})
+    historySearch(result) {
+        this.setState({...this.state, result: result})
     }
 
     historyClick(index) {
@@ -69,7 +81,7 @@ class App extends Component {
                         <div class="col">
                             <SearchBar
                                 query={this.state.query}
-                                onSubmitPressed={(newQuery) => this.onSubmitPressed(newQuery)}
+                                onSubmitPressed={newQuery => this.onSubmitPressed(newQuery)}
                             />
                             <hr/>
                             <div className="row">
@@ -112,11 +124,11 @@ class App extends Component {
 
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                user.getIdToken(true).then(idToken => {
-                    console.log(idToken)
-                }).catch(function(error) {
-                    console.log(error)
-                });
+                // user.getIdToken(true).then(idToken => {
+                //     console.log(idToken)
+                // }).catch(function(error) {
+                //     console.log(error)
+                // })
             }
         })
     }

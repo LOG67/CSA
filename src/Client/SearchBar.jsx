@@ -21,18 +21,15 @@ export default class SearchBar extends Component {
     }
 
     handleChangeName(e) {
-        this.setState({name: e.target.value})
-        e.preventDefault()
+        this.setState({ ...this.state, name: e.target.value })        
     }
 
     handleChangeFromDate(e) {
-        this.setState({fromDate: e.target.value})
-        e.preventDefault()
+        this.setState({ ...this.state, fromDate: e.target.value })
     }
 
     handleChangeToDate(e) {
-        this.setState({toDate: e.target.value})
-        e.preventDefault()
+        this.setState({ ...this.state, toDate: e.target.value })
     }
 
     render() {
