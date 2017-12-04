@@ -67,7 +67,7 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
             result = {...result, allText}
             db.ref('users/' + decodedToken.uid + '/histories').push().set(result)
             res.send(result).end()
-            
+
             // console.log(a)
             // axios(watsonReqConf(a)).then(({data}) => {
             //     res.status(404).send("hello").end()
