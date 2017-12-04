@@ -58,19 +58,21 @@ class App extends Component {
                     username={this.state.username}
                     onLogoutPressed={() => this.onLogoutPressed}
                 />
-                <div className="container-fluid">
+                <div className="container-fluid ">
                     <div className="row">
-                        <div className="col">
-                            <div className="bg-dark text-light sidebar">
-                                <h5 className="text-center text">History</h5>
+                        <div className="col col-sm-3 col-md-2">
+                            <div className=" bg-dark text-light sidebar">
+                                <h5 className="text-center text mt-md-3">History</h5>
                                 <SideBar results={this.state.histories}/>
                             </div>
                         </div>
-                        <div class="col">
+                        <div className="col bg-light text-dark">
+                            <div className=" mt-md-3">
                             <SearchBar
                                 query={this.state.query}
                                 updater={(newQuery) => this.update(newQuery)}
                             />
+                            </div>
                             <hr/>
                             <div className="row">
                                 <SearchResult

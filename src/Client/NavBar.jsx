@@ -26,7 +26,7 @@ export default class NavBar extends Component {
                 <form>
                     <label>{'Hello, ' + this.props.username}</label>
                     <button
-                        class="btn btn-default mb-3 mb-md-0 ml-md-3"
+                        className="btn btn-warning mb-3 mb-md-0 ml-md-3"
                         type="submit"
                         onClick={(e) => this.onLogoutPressed(e)}>
                         Logout
