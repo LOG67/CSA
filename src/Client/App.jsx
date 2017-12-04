@@ -2,12 +2,12 @@ import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import * as firebase from 'firebase'
 import * as firebaseui from 'firebaseui'
-
 import config from '../../config.js'
 import SearchBar from './SearchBar.jsx'
 import SideBar from './SideBar.jsx'
 import SearchResult from './SearchResult.jsx'
 import NavBar from './NavBar.jsx'
+import ErrowBar from "./ErrorBar.jsx"
 
 import dummyData from './DummyData.json'
 
@@ -58,6 +58,9 @@ class App extends Component {
                     username={this.state.username}
                     onLogoutPressed={() => this.onLogoutPressed}
                 />
+                <div>
+                <ErrowBar />
+                </div>
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col col-md-2">
