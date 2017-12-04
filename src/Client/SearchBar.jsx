@@ -50,31 +50,27 @@ export default class SearchBar extends Component {
         return (
             <form onSubmit={e => this.handleSubmit(e)}>
                 <div className="form-row">
-                    <div className="col-4">
-                        <input className="form-control "
+                        <input className="form-control col-4"
                             type="text"
                             value={this.state.name}
                             onChange={e => this.handleChangeName(e)}
                             placeholder='Company Name'/>
-                        </div>
-                        <div className="col">
-                            <input className="form-control "
-                                type="text"
-                                value={this.state.fromDate}
-                                onChange={e => this.handleChangeFromDate(e)}
-                                placeholder='From MM/DD/YYYY'/>
-                            </div>
-                            <div className="col">
-                                <input className="form-control"
-                                    type="text"
-                                    value={this.state.toDate}
-                                    onChange={e => this.handleChangeToDate(e)}
-                                    placeholder='To MM/DD/YYYY'/>
-                                </div>
-                                <button className="btn btn-dark text-center ml-md-4 mr-md-2" type="submit"
-                                >Search</button>
-                            </div>
-                        </form>
+
+                        <input className="form-control col"
+                            type="text"
+                            value={this.state.fromDate}
+                            onChange={e => this.handleChangeFromDate(e)}
+                            placeholder='From MM/DD/YYYY'/>
+
+                        <input className="form-control col"
+                            type="text"
+                            value={this.state.toDate}
+                            onChange={e => this.handleChangeToDate(e)}
+                            placeholder='To MM/DD/YYYY'/>
+
+                        <button className="btn btn-dark text-center ml-md-4 mr-md-2" type="submit">Search</button>
+                </div>
+            </form>
                     )
                 }
             }
