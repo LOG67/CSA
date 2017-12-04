@@ -17,6 +17,7 @@ class App extends Component {
         super(props)
         this.state = {
             userID: '',
+            username: 'Mehran',
             query: {},
             histories: dummyData.histories,
             result: dummyData.result
@@ -27,6 +28,13 @@ class App extends Component {
     componentDidMount() {
         init()
         auth()
+    }
+
+
+    // Event Handlers
+
+    onLogoutPressed() {
+        console.log('here')
     }
 
     update(query) {
@@ -41,33 +49,38 @@ class App extends Component {
         this.update();
     }
 
+    // {/*-- <div id="firebaseui-auth-container"></div>*/}
 
     render() {
         return (
             <div>
-                <NavBar />
-                <div className="container-fluid ">
+                <NavBar
+                    username={this.state.username}
+                    onLogoutPressed={() => this.onLogoutPressed}
+                />
+                <div className="container-fluid">
                     <div className="row">
-                        <div className="col-sm-3 col-md-2 bg-dark text-light sidebar">
-                            <h5 className="text-center text">History</h5>
-                            <SideBar results={this.state.histories}/>
+                        <div className="col">
+                            <div className="bg-dark text-light sidebar">
+                                <h5 className="text-center text">History</h5>
+                                <SideBar results={this.state.histories}/>
+                            </div>
                         </div>
-                        <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-                            {/*-- <div id="firebaseui-auth-container"></div>*/}
+                        <div class="col">
                             <SearchBar
                                 query={this.state.query}
-                                updater={(newQuery) => this.update(newQuery)}/>
-                                <hr/>
-                                <div className="row">
-                                    <SearchResult
-                                        result={this.state.result}
-                                    />
-                                </div>
-                            </main>
+                                updater={(newQuery) => this.update(newQuery)}
+                            />
+                            <hr/>
+                            <div className="row">
+                                <SearchResult
+                                    result={this.state.result}
+                                />
+                            </div>
                         </div>
                     </div>
-
                 </div>
+            </div>
             )
         }
     }
@@ -117,28 +130,28 @@ class App extends Component {
         <App/>
         , root)
 
-/*
-State: {
-    userID: t.String,
-    query: t.Query,
-    result: t.Result,
-    histories: [t.History],
-}
+        /*
+        State: {
+        userID: t.String,
+        query: t.Query,
+        result: t.Result,
+        histories: [t.History],
+    }
 
-History: {
+    History: {
     query: t.Query,
     result: t.Result,
 }
 
 Query: {
-    companySymbol: t.String,
-    startDate: t.String,
-    endDate: t.String,
+companySymbol: t.String,
+startDate: t.String,
+endDate: t.String,
 }
 
 Result: {
-    quotes: [t.Quote],
-    tone: t.Tone,
+quotes: [t.Quote],
+tone: t.Tone,
 }
 
 Tone: {
@@ -146,9 +159,9 @@ Tone: {
 }
 
 Quote: {
-    date: t.String,
-    open: t.Number,
-    close: t.Number,
-    volume: t.Number,
+date: t.String,
+open: t.Number,
+close: t.Number,
+volume: t.Number,
 }
 */
