@@ -37,7 +37,7 @@ class App extends Component {
         console.log('here')
     }
 
-    update(query) {
+    onSubmitPressed(query) {
         this.setState({...this.state, query: query})
     }
 
@@ -70,7 +70,7 @@ class App extends Component {
                             <div className=" mt-md-3">
                             <SearchBar
                                 query={this.state.query}
-                                updater={(newQuery) => this.update(newQuery)}
+                                onSubmitPressed={(newQuery) => this.onSubmitPressed(newQuery)}
                             />
                             </div>
                             <hr/>
