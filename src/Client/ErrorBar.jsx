@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 
 export default class ErrorBar extends Component {
 
-
     render() {
         var showError = true
         let errorMsg = "Error Bar is here."
-        let res = this.props.errorArray
+        let res = this.props.errors
+        console.log(res);
         if (res.length === 0) {
             showError = false
         }
