@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import * as firebase from 'firebase'
 import * as firebaseui from 'firebaseui'
-import axios from 'axios'
-
 import config from '../../config.js'
 import SearchBar from './SearchBar.jsx'
 import SideBar from './SideBar.jsx'
@@ -13,10 +11,7 @@ import ErrowBar from "./ErrorBar.jsx"
 
 import dummyData from './DummyData.json'
 
-const SERVER_URL = 'http://localhost:3000/'
-
 class App extends Component {
-
     constructor(props) {
         super(props)
         this.state = {
@@ -43,19 +38,10 @@ class App extends Component {
 
     onSubmitPressed(query) {
         this.setState({...this.state, query: query})
-        firebase.auth().currentUser.getIdToken(true).then(idToken => {
-            let url = SERVER_URL + 'query/symbol/' + query.companySymbol + '/from/' +
-                query.from + '/to/' + query.to + '/token/' + idToken
-            return axios.get(url)
-        }).then(res => {
-            this.setState({...this.state, result: res.data})            
-        }).catch(function(error) {
-            console.log(error)
-        })
     }
 
-    historySearch(result) {
-        this.setState({...this.state, result: result})
+    historySearch(results) {
+        this.setState({...this.state, results: results})
     }
 
     historyClick(index) {
@@ -72,23 +58,23 @@ class App extends Component {
                     onLogoutPressed={() => this.onLogoutPressed}
                 />
                 <div>
-                <ErrowBar />
+                    <ErrowBar showError={false}/>
                 </div>
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col col-md-2">
                             <div className=" sidebar-light sidebar mt-md-3"
-                                 style={{backgroundColor:"#ff8533"}}>
+                                style={{backgroundColor:"#ff8533"}}>
                                 <h5 className="text-center text  ">History</h5>
                                 <SideBar results={this.state.histories}/>
                             </div>
                         </div>
                         <div className="col col-sm-9 ml-sm-auto col-md-10 bg-light text-dark">
                             <div className=" mt-md-3">
-                            <SearchBar
-                                query={this.state.query}
-                                onSubmitPressed={newQuery => this.onSubmitPressed(newQuery)}
-                            />
+                                <SearchBar
+                                    query={this.state.query}
+                                    onSubmitPressed={(newQuery) => this.onSubmitPressed(newQuery)}
+                                />
                             </div>
                             <hr/>
                             <div className="row">
@@ -100,66 +86,66 @@ class App extends Component {
                     </div>
                 </div>
             </div>
-            )
-        }
+        )
     }
+}
 
 
-    function auth() {
+function auth() {
 
-        var uiConfig = {
-            signInOptions: [
-                // Leave the lines as is for the providers you want to offer your users.
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            ],
-            callbacks: {
-                signInSuccess: function (currentUser, credential, redirectUrl) {
-                    // Do something.
-                    // Return type determines whether we continue the redirect automatically
-                    // or whether we leave that to developer to handle.
-                    return false
-                }
+    var uiConfig = {
+        signInOptions: [
+            // Leave the lines as is for the providers you want to offer your users.
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        ],
+        callbacks: {
+            signInSuccess: function (currentUser, credential, redirectUrl) {
+                // Do something.
+                // Return type determines whether we continue the redirect automatically
+                // or whether we leave that to developer to handle.
+                return false
             }
         }
-
-
-        // Initialize the FirebaseUI Widget using Firebase.
-        var ui = new firebaseui.auth.AuthUI(firebase.auth())
-        // The start method will wait until the DOM is loaded.
-        // ui.start('#firebaseui-auth-container', uiConfig)
-
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                // user.getIdToken(true).then(idToken => {
-                //     console.log(idToken)
-                // }).catch(function(error) {
-                //     console.log(error)
-                // })
-            }
-        })
     }
 
-    function init() {
-        firebase.initializeApp(config)
-    }
 
-    const root = document.getElementById('app')
-    ReactDOM.render(
-        <App/>
-        , root)
+    // Initialize the FirebaseUI Widget using Firebase.
+    var ui = new firebaseui.auth.AuthUI(firebase.auth())
+    // The start method will wait until the DOM is loaded.
+    // ui.start('#firebaseui-auth-container', uiConfig)
 
-        /*
-        State: {
-        userID: t.String,
-        query: t.Query,
-        result: t.Result,
-        histories: [t.History],
-    }
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            user.getIdToken(true).then(idToken => {
+                console.log(idToken)
+            }).catch(function(error) {
+                console.log(error)
+            });
+        }
+    })
+}
 
-    History: {
+function init() {
+    firebase.initializeApp(config)
+}
+
+const root = document.getElementById('app')
+ReactDOM.render(
+    <App/>
+    , root)
+
+    /*
+    State: {
+    userID: t.String,
     query: t.Query,
     result: t.Result,
+    histories: [t.History],
+}
+
+History: {
+query: t.Query,
+result: t.Result,
 }
 
 Query: {
