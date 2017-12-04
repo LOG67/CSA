@@ -24,7 +24,8 @@ class App extends Component {
             username: 'Mehran',
             query: {},
             histories: dummyData.histories,
-            result: dummyData.result
+            result: dummyData.result,
+            errors: []
         }
     }
 
@@ -41,14 +42,19 @@ class App extends Component {
         console.log('here')
     }
 
-    onSubmitPressed(query) {
+    onSubmitPressed(query, errors) {
+        if (errors && errors.length > 0) {
+            this.setState({ ...this.state, errors })
+            return
+        }
+
         this.setState({...this.state, query: query})
         firebase.auth().currentUser.getIdToken(true).then(idToken => {
             let url = SERVER_URL + 'query/symbol/' + query.companySymbol + '/from/' +
                 query.from + '/to/' + query.to + '/token/' + idToken
             return axios.get(url)
         }).then(res => {
-            this.setState({...this.state, result: res.data})            
+            this.setState({...this.state, result: res.data})
         }).catch(function(error) {
             console.log(error)
         })
@@ -87,7 +93,7 @@ class App extends Component {
                             <div className=" mt-md-3">
                             <SearchBar
                                 query={this.state.query}
-                                onSubmitPressed={newQuery => this.onSubmitPressed(newQuery)}
+                                onSubmitPressed={(newQuery, errors) => this.onSubmitPressed(newQuery, errors)}
                             />
                             </div>
                             <hr/>

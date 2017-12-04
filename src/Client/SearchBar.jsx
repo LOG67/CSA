@@ -1,4 +1,7 @@
 import React, {PropTypes, Component} from 'react'
+import moment from 'moment'
+
+import companies from '../../companies.js'
 
 
 export default class SearchBar extends Component {
@@ -12,16 +15,27 @@ export default class SearchBar extends Component {
     }
 
     handleSubmit(e) {
+        // first validate the inputs
+        var errors = []
+        if (!companies.includes(this.state.name)) {
+            errors.push('Provide a valid company symbol!')
+        }
+        if (!moment(this.state.fromDate).isValid()) {
+            errors.push('Provide a valid start date!')
+        }
+        if (!moment(this.state.toDate).isValid()) {
+            errors.push('Provide a valid end date!')
+        }
         this.props.onSubmitPressed({
             companySymbol: this.state.name,
             from: this.state.fromDate,
             to: this.state.toDate,
-        })
+        }, errors)
         e.preventDefault()
     }
 
     handleChangeName(e) {
-        this.setState({ ...this.state, name: e.target.value })        
+        this.setState({ ...this.state, name: e.target.value.toUpperCase() })
     }
 
     handleChangeFromDate(e) {
