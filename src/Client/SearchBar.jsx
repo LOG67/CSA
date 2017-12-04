@@ -7,7 +7,7 @@ import companies from '../../companies.js'
 export default class SearchBar extends Component {
 
     handleSubmit(e) {
-        let { companySymbol, to, from, onSubmitPressed } = this.props.query
+        let { companySymbol, to, from } = this.props.query
         // first validate the inputs
         var errors = []
         if (!companies.includes(companySymbol)) {
@@ -19,7 +19,7 @@ export default class SearchBar extends Component {
         if (!moment(to).isValid()) {
             errors.push('Provide a valid end date!')
         }
-        onSubmitPressed(errors)
+        this.props.onSubmitPressed(errors)
         e.preventDefault()
     }
 

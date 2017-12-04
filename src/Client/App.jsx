@@ -23,9 +23,9 @@ class App extends Component {
             userID: '',
             username: 'Mehran',
             query: {},
-            histories: dummyData.histories,
-            result: dummyData.result,
-            errors: []
+            histories: [],
+            result: {},
+            errors: [],
         }
     }
 
@@ -63,9 +63,7 @@ class App extends Component {
         })
     }
 
-    onHistorySelected(index) {
-        console.log(this.state.histories)
-        console.log(index)
+    onHistorySelected(index) {        
         const result = this.state.histories[index]
         const query = result.query
         this.setState({ ...this.state, result, query })
@@ -149,7 +147,7 @@ function init(app) {
                 const unsortedHistories = _.values(historyObjects)
                 const histories = _.sortBy(unsortedHistories, ['date']).reverse()
                 app.setState({ ...app.state, histories }, () => {
-                    if (_.isEmpty(app.state.result)) {
+                    if (_.isEmpty(app.state.result) && !_.isEmpty(app.state.histories)) {
                         app.setState({ ...app.state, result: histories[0],
                             query: histories[0].query })
                     }
@@ -188,7 +186,7 @@ Tone: {
 }
 
 Quote: {
-date: t.String,
+qDate: t.String,
 open: t.Number,
 close: t.Number,
 volume: t.Number,

@@ -103,7 +103,7 @@ app.listen(3000, () => console.log('Example app listening on port 3000!'))
 
 // helper methods
 function cleanQuotes(quotes) {
-    return quotes.map(({date, open, close, volume}) => ({date, open, close, volume}))
+    return quotes.map(({date, open, close, volume}) => ({date: moment(date).toISOString(), open, close, volume}))
 }
 
 function crawl(news, callback) {
