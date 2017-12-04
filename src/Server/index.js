@@ -51,9 +51,8 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
             from,
             to,
         }
-        let date = moment().toISOString()
+
         var result = {
-            date,
             query,
         }
 
@@ -62,16 +61,15 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
             from,
             to,
         }).then(financialRes => {
-            result = { ...result, quotes: cleanQuotes(financialRes) }
-            return googleFinance.companyNews({ symbol })
+            result = {...result, quotes: cleanQuotes(financialRes)}
+            return googleFinance.companyNews({symbol})
         }).then(newsRes => {
             let allText = newsRes.map(n => {return n.summary}).reduce((sum, n) => {return sum + '\n' + n}, '')
             let tone = {
                 sadness: 0.1,
                 angry: 0.2,
             }
-            result = { ...result, tone }
-            console.log(result)
+            result = {...result, tone}
             db.ref('users/' + decodedToken.uid + '/histories').push().set(result)
             res.send(result).end()
 
@@ -103,7 +101,7 @@ app.listen(3000, () => console.log('Example app listening on port 3000!'))
 
 // helper methods
 function cleanQuotes(quotes) {
-    return quotes.map(({date, open, close, volume}) => ({date: moment(date).toISOString(), open, close, volume}))
+    return quotes.map(({date, open, close, volume}) => ({date, open, close, volume}))
 }
 
 function crawl(news, callback) {

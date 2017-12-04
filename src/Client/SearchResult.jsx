@@ -1,17 +1,12 @@
 import React, { Component } from 'react'
 import { Line } from 'react-chartjs-2'
 import moment from 'moment'
-import _ from 'lodash'
 
 export default class SearchResult extends Component {
     render() {
-        if (_.isEmpty(this.props.result)) {
-            return (<div />)
-        }
         let quotes = this.props.result.quotes
         let options = generateChartOptions()
         let labels = quotes.map(q => moment(q.date).format('MMM D'))
-        console.log(labels)
         let openQuotesData = quotes.map(q => q.open)
         let closeQuotesData = quotes.map(q => q.close)
         let data = {

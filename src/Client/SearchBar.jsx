@@ -5,65 +5,76 @@ import companies from '../../companies.js'
 
 
 export default class SearchBar extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            name: props.query.companySymbol,
+            fromDate: props.query.from,
+            toDate: props.query.to,
+        }
+    }
 
     handleSubmit(e) {
-        let { companySymbol, to, from } = this.props.query
         // first validate the inputs
         var errors = []
-        if (!companies.includes(companySymbol)) {
+        if (!companies.includes(this.state.name)) {
             errors.push('Provide a valid company symbol!')
         }
-        if (!moment(from).isValid()) {
+        if (!moment(this.state.fromDate).isValid()) {
             errors.push('Provide a valid start date!')
         }
-        if (!moment(to).isValid()) {
+        if (!moment(this.state.toDate).isValid()) {
             errors.push('Provide a valid end date!')
         }
-        this.props.onSubmitPressed(errors)
+        this.props.onSubmitPressed({
+            companySymbol: this.state.name,
+            from: this.state.fromDate,
+            to: this.state.toDate,
+        }, errors)
         e.preventDefault()
     }
 
     handleChangeName(e) {
-        let companySymbol = e.target.value.toUpperCase()
-        this.props.onQueryChanged({ ...this.props.query, companySymbol })
+        this.setState({ ...this.state, name: e.target.value.toUpperCase() })
     }
 
     handleChangeFromDate(e) {
-        let from = e.target.value
-        this.props.onQueryChanged({ ...this.props.query, from })
+        this.setState({ ...this.state, fromDate: e.target.value })
     }
 
     handleChangeToDate(e) {
-        let to = e.target.value
-        this.props.onQueryChanged({ ...this.props.query, to })
+        this.setState({ ...this.state, toDate: e.target.value })
     }
 
     render() {
-        let { companySymbol, from, to } = this.props.query
         return (
             <form onSubmit={e => this.handleSubmit(e)}>
                 <div className="form-row">
-                        <input className="form-control col-4"
+                    <div className="col-4">
+                        <input className="form-control "
                             type="text"
-                            value={companySymbol}
+                            value={this.state.name}
                             onChange={e => this.handleChangeName(e)}
                             placeholder='Company Name'/>
-
-                        <input className="form-control col"
-                            type="text"
-                            value={from}
-                            onChange={e => this.handleChangeFromDate(e)}
-                            placeholder='From MM/DD/YYYY'/>
-
-                        <input className="form-control col"
-                            type="text"
-                            value={to}
-                            onChange={e => this.handleChangeToDate(e)}
-                            placeholder='To MM/DD/YYYY'/>
-
-                        <button className="btn btn-dark text-center ml-md-4 mr-md-2" type="submit">Search</button>
-                </div>
-            </form>
+                        </div>
+                        <div className="col">
+                            <input className="form-control "
+                                type="text"
+                                value={this.state.fromDate}
+                                onChange={e => this.handleChangeFromDate(e)}
+                                placeholder='From MM/DD/YYYY'/>
+                            </div>
+                            <div className="col">
+                                <input className="form-control"
+                                    type="text"
+                                    value={this.state.toDate}
+                                    onChange={e => this.handleChangeToDate(e)}
+                                    placeholder='To MM/DD/YYYY'/>
+                                </div>
+                                <button className="btn btn-dark text-center ml-md-4 mr-md-2" type="submit"
+                                >Search</button>
+                            </div>
+                        </form>
                     )
                 }
             }
