@@ -38,12 +38,11 @@ class App extends Component {
     }
 
     onSubmitPressed(query, errors) {
-        if (errors && errors.length > 0) {
-            this.setState({ ...this.state, errors })
+        this.setState({ ...this.state, query, errors })
+        if (errors.length > 0) {
             return
         }
 
-        this.setState({...this.state, query: query})
         firebase.auth().currentUser.getIdToken(true).then(idToken => {
             let url = SERVER_URL + 'query/symbol/' + query.companySymbol + '/from/' +
                 query.from + '/to/' + query.to + '/token/' + idToken
