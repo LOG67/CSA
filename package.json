@@ -28,7 +28,7 @@
     "firebase-admin": "^5.5.1",
     "firebaseui": "^2.5.1",
     "google-finance": "^0.1.10",
-    "moment": "^2.19.2",
+    "moment": "^2.19.3",
     "react": "^16.1.1",
     "react-dom": "^16.1.1"
   },

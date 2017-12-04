@@ -64,7 +64,11 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
             return googleFinance.companyNews({symbol})
         }).then(newsRes => {
             let allText = newsRes.map(n => {return n.summary}).reduce((sum, n) => {return sum + '\n' + n}, '')
-            result = {...result, allText}
+            let tone = {
+                sadness: 0.1,
+                angry: 0.2,
+            }
+            result = {...result, tone}
             db.ref('users/' + decodedToken.uid + '/histories').push().set(result)
             res.send(result).end()
 
@@ -96,7 +100,7 @@ app.listen(3000, () => console.log('Example app listening on port 3000!'))
 
 // helper methods
 function cleanQuotes(quotes) {
-    return quotes.map(({date, high, low, volume}) => ({date, high, low, volume}))
+    return quotes.map(({date, open, close, volume}) => ({date, open, close, volume}))
 }
 
 function crawl(news, callback) {
