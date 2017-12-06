@@ -70,8 +70,12 @@ class App extends Component {
         this.setState({ ...this.state, result, query })
     }
 
+    onErrorDismissed() {
+        this.setState({...this.state, errors:[]})
 
-    // {/*-- <div id="firebaseui-auth-container"></div>*/}
+    }
+    /* objectSpread*/
+
 
     render() {
         return (
@@ -81,7 +85,8 @@ class App extends Component {
                     onLogoutPressed={() => this.onLogoutPressed}
                 />
                 <div>
-                    <ErrorBar  errors={this.state.errors} />
+                    <ErrorBar  errors={this.state.errors}
+                    dismiss={() => this.onErrorDismissed()}/>
                 </div>
                 <div className="container-fluid">
                     <div className="row">
