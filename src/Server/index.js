@@ -17,7 +17,6 @@ admin.initializeApp({
 })
 
 let db = admin.database()
-let ref = db.ref('restricted_access/secret_document')
 
 const app = express()
 
@@ -98,9 +97,6 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
     })
 })
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
-
-
 // helper methods
 function cleanQuotes(quotes) {
     return quotes.map(({date, open, close, volume}) => ({date: moment(date).toISOString(), open, close, volume}))
@@ -133,3 +129,6 @@ function watsonReqConf(text) {
         data: JSON.stringify({text})
     }
 }
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log('Server is running on port: ' + port))
