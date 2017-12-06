@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server --env.dev",
     "build": "webpack",
-    "start": "node dist/server.js",
-    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress"    
+    "start": "node dist/server.js"    
   },
   "repository": {
     "type": "git",
