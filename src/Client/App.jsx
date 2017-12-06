@@ -83,6 +83,12 @@ class App extends Component {
 
 
     render() {
+        var signedIn = false;
+        if (this.state.username.length === 0) {
+            signedIn = false;
+        } else {
+            signedIn = true;
+        }
         return (
             <div>
                 <NavBar
@@ -106,13 +112,16 @@ class App extends Component {
                                 </div>
                             </div>
                             <div className="col col-sm-9 ml-sm-auto col-md-10 bg-light text-dark">
-                                <div className=" mt-md-3">
+                                <div className=" mt-md-3"
+                                    style={signedIn ? {visibility: 'visible'} :
+                                                            {display: 'none'}}>
                                     <SearchBar
                                         query={this.state.query}
                                         onSubmitPressed={(errors) => this.onSubmitPressed(errors)}
                                         onQueryChanged={newQuery => this.onQueryChanged(newQuery)}
                                     />
                                 </div>
+
                                 <hr/>
                                 <div className="row">
                                     <SearchResult

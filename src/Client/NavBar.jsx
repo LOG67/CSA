@@ -8,7 +8,7 @@ export default class NavBar extends Component {
     }
 
     render() {
-        var showLogout = true;
+        var showLogout = false;
         if (this.props.username.length === 0) {
             showLogout = false;
         } else {
