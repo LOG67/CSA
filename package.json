@@ -26,7 +26,7 @@
     "firebase": "^4.6.2",
     "firebase-admin": "^5.5.1",
     "firebaseui": "^2.5.1",
-    "google-finance": "^0.1.10",
+    "google-finance": "LOG67/node-google-finance",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "moment": "^2.19.3",
