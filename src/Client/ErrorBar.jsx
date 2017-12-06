@@ -8,7 +8,6 @@ export default class ErrorBar extends Component {
         var showError = true
         let errorMsg = "Error Bar is here."
         let res = this.props.errors
-        console.log(res);
         if (res.length === 0) {
             showError = false
         }
@@ -17,7 +16,7 @@ export default class ErrorBar extends Component {
                 className="alert alert-danger text-center"
                 id="errorEleID"
                 style={showError ? {visibility: 'visible'} : {display: 'none'}}>
-                <button type="button" class="close" aria-label="Close"
+                <button type="button" className="close" aria-label="Close"
                     onClick={this.props.dismiss}
                     >
                     <span aria-hidden="true">&times;</span>
