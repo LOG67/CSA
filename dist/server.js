@@ -77,16 +77,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_google_finance__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_google_finance___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_google_finance__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase_admin__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_firebase_admin___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_firebase_admin__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_cheerio__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_cheerio___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_cheerio__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__adminsdk_json__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__adminsdk_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__adminsdk_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__companies__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ibmconfig__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_firebase_admin__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_firebase_admin___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_firebase_admin__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_watson_developer_cloud_tone_analyzer_v3__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_watson_developer_cloud_tone_analyzer_v3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_watson_developer_cloud_tone_analyzer_v3__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__adminsdk_json__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__adminsdk_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__adminsdk_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__companies__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ibmconfig__ = __webpack_require__(9);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -100,16 +98,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 
-
 // firebase stuff
-__WEBPACK_IMPORTED_MODULE_5_firebase_admin__["initializeApp"]({
-    credential: __WEBPACK_IMPORTED_MODULE_5_firebase_admin__["credential"].cert(__WEBPACK_IMPORTED_MODULE_7__adminsdk_json___default.a),
+__WEBPACK_IMPORTED_MODULE_4_firebase_admin__["initializeApp"]({
+    credential: __WEBPACK_IMPORTED_MODULE_4_firebase_admin__["credential"].cert(__WEBPACK_IMPORTED_MODULE_6__adminsdk_json___default.a),
     databaseURL: "https://csanalyzer-91607.firebaseio.com/"
 });
 
-var db = __WEBPACK_IMPORTED_MODULE_5_firebase_admin__["database"]();
-
+var db = __WEBPACK_IMPORTED_MODULE_4_firebase_admin__["database"]();
 var app = __WEBPACK_IMPORTED_MODULE_0_express___default()();
+var toneAnalyzer = new __WEBPACK_IMPORTED_MODULE_5_watson_developer_cloud_tone_analyzer_v3___default.a({
+    username: __WEBPACK_IMPORTED_MODULE_8__ibmconfig__["a" /* default */].username,
+    password: __WEBPACK_IMPORTED_MODULE_8__ibmconfig__["a" /* default */].password,
+    version_date: '2016-05-19'
+});
 
 app.use(__WEBPACK_IMPORTED_MODULE_0_express___default.a.static(__WEBPACK_IMPORTED_MODULE_1_path___default.a.join(__dirname, 'public')));
 
@@ -125,7 +126,7 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', function (req, r
     var to = req.params.to || '';
 
     // check the company
-    if (!__WEBPACK_IMPORTED_MODULE_8__companies__["a" /* default */].includes(companySymbol)) {
+    if (!__WEBPACK_IMPORTED_MODULE_7__companies__["a" /* default */].includes(companySymbol)) {
         res.status(404).send("No company symbol: " + companySymbol).end();
         return;
     }
@@ -134,7 +135,7 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', function (req, r
     //
     //
 
-    __WEBPACK_IMPORTED_MODULE_5_firebase_admin__["auth"]().verifyIdToken(req.params.token).then(function (decodedToken) {
+    __WEBPACK_IMPORTED_MODULE_4_firebase_admin__["auth"]().verifyIdToken(req.params.token).then(function (decodedToken) {
         var symbol = 'NASDAQ:' + companySymbol;
         var query = {
             companySymbol: companySymbol,
@@ -155,35 +156,32 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', function (req, r
             result = _extends({}, result, { quotes: cleanQuotes(financialRes) });
             return __WEBPACK_IMPORTED_MODULE_3_google_finance___default.a.companyNews({ symbol: symbol });
         }).then(function (newsRes) {
-            var allText = newsRes.map(function (n) {
+            var text = newsRes.map(function (n) {
                 return n.summary;
             }).reduce(function (sum, n) {
                 return sum + '\n' + n;
             }, '');
-            var tone = {
-                sadness: 0.1,
-                angry: 0.2
-            };
-            result = _extends({}, result, { tone: tone });
-            console.log(result);
-            db.ref('users/' + decodedToken.uid + '/histories').push().set(result);
-            res.send(result).end();
 
-            // console.log(a)
-            // axios(watsonReqConf(a)).then(({data}) => {
-            //     res.status(404).send("hello").end()
-            //     console.log("here")
-            //     if (!data || !data.document_tone) {
-            //         res.status(404).send(data).end()
-            //         return
-            //     }
-            //     console.log(data)
-            //     result = data
-            //     res.send(result).end()
-            // }).catch(reason => {
-            //     console.log(reason)
-            //     res.status(404).send(reason).end()
-            // })
+            var toneParams = {
+                text: text,
+                tones: 'emotion'
+            };
+
+            toneAnalyzer.tone(toneParams, function (toneError, toneResponse) {
+                if (toneError) {
+                    console.log(toneError);
+                    res.status(404).send(toneError).end();
+                    return;
+                } else {
+                    // console.log(toneResponse)
+                    var tones = toneResponse.document_tone.tone_categories[0].tones;
+                    console.log(tones);
+                    result = _extends({}, result, { tones: tones
+                        // console.log(result)
+                    });db.ref('users/' + decodedToken.uid + '/histories').push().set(result);
+                    res.send(result).end();
+                }
+            });
         }).catch(function (reason) {
             res.status(404).send(reason).end();
         });
@@ -201,36 +199,6 @@ function cleanQuotes(quotes) {
             volume = _ref.volume;
         return { date: __WEBPACK_IMPORTED_MODULE_2_moment___default()(date).toISOString(), open: open, close: close, volume: volume };
     });
-}
-
-function crawl(news, callback) {
-    var links = news.map(function (n) {
-        return __WEBPACK_IMPORTED_MODULE_4_axios___default.a.get(n.link);
-    });
-    __WEBPACK_IMPORTED_MODULE_4_axios___default.a.all(links).then(function (results) {
-        var res = "";
-        results.forEach(function (r) {
-            var $ = __WEBPACK_IMPORTED_MODULE_6_cheerio___default.a.load(r.data);
-            res += $('p').text();
-        });
-        callback(res);
-    }).catch(function (error) {
-        console.log(error);
-        callback();
-    });
-}
-
-function watsonReqConf(text) {
-    return {
-        url: imbconfig.url,
-        method: 'post',
-        // headers: {'Content-Type': 'application/json'},
-        auth: {
-            username: imbconfig.username,
-            password: imbconfig.password
-        },
-        data: JSON.stringify({ text: text })
-    };
 }
 
 var port = process.env.PORT || 3000;
@@ -266,28 +234,22 @@ module.exports = require("google-finance");
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = require("axios");
+module.exports = require("firebase-admin");
 
 /***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = require("firebase-admin");
+module.exports = require("watson-developer-cloud/tone-analyzer/v3");
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
-module.exports = require("cheerio");
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
 module.exports = {"type":"service_account","project_id":"csanalyzer-91607","private_key_id":"ffa0fb70a66baf9c26309ce3edd8c99beb8c567f","private_key":"-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCovgMdCrEZReRI\nrau+yzGndTwBxOME+hUtHHX9Vx4rLRdVU6GEt68UrarG3w9GSgl93unhFtHZ/goc\nCsdxNTtu/H3Cs3DhENvEzAaGvn2WYTx5NPhiK3qqIUBImR5DW/SK/ylwDqCro1hv\nZ9jfcDgjmtSZW8gY3T75utBnJS/FaRwS46hHL6sH2FZ7fgMnQan6KqtI/AMds3W/\nCJ1Nr9x+zJKJdkp9BFfzTqu/Kcm1S9dBLpLIW652q3GmR9p6XyopTgyPQ/54B4YM\nvJSNVEztFUy91W+0SxbtwTY0O4huPe/S81HsX69+TjPSsTUNcpz8KfmEqjLZ++E6\ncdKSNYflAgMBAAECggEAAwC4oPZs/uBjxthSV1eZ11tKeVSV3qONp2sbfWnkt0t6\n4BGYLPqw0qshgB79kFhmcVc7bb5Ad0LiTqvxbyYNm/TBzypuzo6EfqzLy++NYBT0\nZMrIxcR0zxy+3lvdMkEraaLPS7dy7AMA4qCkNxux4A5UDLOZrLmZMov8w+0hO7/S\n8mxHBTDKkgDP4MdKlSBXNUCJA05N4T8qTOgDBDjpumKaX2vKvTXtIMj7ifn2m21n\nq59aCJGv3UhvO6Xv+J4QkhjLMkttrhwRDrqNFoMvMpe4CzjDfWkpJYPhFACEOLa0\nUL/CvJivv9CWrGEc3LzgtURHT9MTCvEisZXnsia38QKBgQDSyRoIpDB/c6eDd2UP\nRiQsgL+cY/Mvj44JfsdF9csVVQK1ELGe/VoKpRV25kyeNlGuMY0WkOmSDpd8KVWC\nSr2ejvHLaVH/qgvQ1QZrJQbJCYtibUZIzsAeOPhOa1Nv9UoEuV1xM6COFBnmYZOp\ny/z1/9cIWCCf9lZWNNo1c53AMQKBgQDM8C3zYrj7ANFPWMo8K4t/3laH7smtZ5zh\nEWB5JqE8UIOC63q3PeL4XWZomtpMSAr8cLPxx6sWbnzhOGxPLJrdK1HRgnCoCUA2\nVSgSPElof9iUHckcNlfeYbIccApYME/wtSTx0deVpL0O1aREqYIQ+c128NtCb7U1\nQX73mVDp9QKBgQDMPLkx+E1ZoSmFs9FDHHZ+fH2svhfrVJCO2L2jJwcQ8179LGC+\nqcNuHwkOPRWuEvnP7AlF/UGkGOllD/PfnCXhFaZprvIZ5J0wSsi+VpEdiFb7FuCM\nOXBjmFXYPhwJlkWTEDzfK+P85rM1zAQ0+QdxIOUtG574/8omG233bsBCcQKBgGTV\n0GYurwGhl1tJPsh4TH0v8reTgFv33TLIkAVMQo0guHSUVJ8QrjqyCg9yEfLyh6VJ\n9uAB9GZnGr7eOjyCn/gutmU1nySu2I9jOwIt85idPv0x4qAlBPsAatifMBfQPaUc\nG/931nFkyzkfWWIHXV3o63WYcOmxeSGpBkXhg/R5AoGAVG52uNvyha7ylVJRGfM+\nvsw6bRVjeImdxFe+lCQhfpwePwL+JJ3OiIDWgd7ykH+UVViAt501TIuQKTw8q+1n\nMXXXB/xJRSYxMvS4ig30FzsUDa02OgH8BtG/fImYOAg1uTm1pqmywOAR8UCY6QjC\nE1VP3JrvdodkfXdydp03mps=\n-----END PRIVATE KEY-----\n","client_email":"firebase-adminsdk-m6c2v@csanalyzer-91607.iam.gserviceaccount.com","client_id":"103318465342488433125","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://accounts.google.com/o/oauth2/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url":"https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-m6c2v%40csanalyzer-91607.iam.gserviceaccount.com"}
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -296,7 +258,7 @@ var companies = ["PIH", "TURN", "FLWS", "FCCY", "SRCE", "VNET", "TWOU", "JOBS", 
 /* harmony default export */ __webpack_exports__["a"] = (companies);
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -306,7 +268,7 @@ var ibmconfig = {
     "password": "blexrUrzwy1k"
 };
 
-/* unused harmony default export */ var _unused_webpack_default_export = (ibmconfig);
+/* harmony default export */ __webpack_exports__["a"] = (ibmconfig);
 
 /***/ })
 /******/ ]);

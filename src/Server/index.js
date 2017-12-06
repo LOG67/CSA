@@ -2,9 +2,9 @@ import express from 'express'
 import path from 'path'
 import moment from 'moment'
 import googleFinance from 'google-finance'
-import axios from 'axios'
 import * as admin from "firebase-admin"
-import cheerio from 'cheerio'
+import ToneAnalyzerV3 from 'watson-developer-cloud/tone-analyzer/v3'
+
 
 import adminsdk from "../../adminsdk.json"
 import companies from '../../companies'
@@ -16,9 +16,13 @@ admin.initializeApp({
   databaseURL: "https://csanalyzer-91607.firebaseio.com/",
 })
 
-let db = admin.database()
-
+const db = admin.database()
 const app = express()
+const toneAnalyzer = new ToneAnalyzerV3({
+    username: ibmconfig.username,
+    password: ibmconfig.password,
+    version_date: '2016-05-19',
+})
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -64,31 +68,28 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
             result = { ...result, quotes: cleanQuotes(financialRes) }
             return googleFinance.companyNews({ symbol })
         }).then(newsRes => {
-            let allText = newsRes.map(n => {return n.summary}).reduce((sum, n) => {return sum + '\n' + n}, '')
-            let tone = {
-                sadness: 0.1,
-                angry: 0.2,
-            }
-            result = { ...result, tone }
-            console.log(result)
-            db.ref('users/' + decodedToken.uid + '/histories').push().set(result)
-            res.send(result).end()
+            let text = newsRes.map(n => {return n.summary}).reduce((sum, n) => {return sum + '\n' + n}, '')
 
-            // console.log(a)
-            // axios(watsonReqConf(a)).then(({data}) => {
-            //     res.status(404).send("hello").end()
-            //     console.log("here")
-            //     if (!data || !data.document_tone) {
-            //         res.status(404).send(data).end()
-            //         return
-            //     }
-            //     console.log(data)
-            //     result = data
-            //     res.send(result).end()
-            // }).catch(reason => {
-            //     console.log(reason)
-            //     res.status(404).send(reason).end()
-            // })
+            let toneParams = {
+                text,
+                tones: 'emotion',
+            }
+
+            toneAnalyzer.tone(toneParams, (toneError, toneResponse) => {
+                if (toneError) {
+                    console.log(toneError)
+                    res.status(404).send(toneError).end()
+                    return
+                } else {
+                    // console.log(toneResponse)
+                    let tones = toneResponse.document_tone.tone_categories[0].tones
+                    console.log(tones)
+                    result = { ...result, tones }
+                    // console.log(result)
+                    db.ref('users/' + decodedToken.uid + '/histories').push().set(result)
+                    res.send(result).end()
+                }
+            })
         }).catch(reason => {
             res.status(404).send(reason).end()
         })
@@ -100,34 +101,6 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
 // helper methods
 function cleanQuotes(quotes) {
     return quotes.map(({date, open, close, volume}) => ({date: moment(date).toISOString(), open, close, volume}))
-}
-
-function crawl(news, callback) {
-    var links = news.map(n => axios.get(n.link))
-    axios.all(links).then(results => {
-        var res = "";
-        results.forEach(r => {
-            const $ = cheerio.load(r.data)
-            res += $('p').text()
-        })
-        callback(res)
-    }).catch(error => {
-        console.log(error)
-        callback()
-    })
-}
-
-function watsonReqConf(text) {
-    return {
-        url: imbconfig.url,
-        method: 'post',
-        // headers: {'Content-Type': 'application/json'},
-        auth: {
-            username: imbconfig.username,
-            password: imbconfig.password,
-        },
-        data: JSON.stringify({text})
-    }
 }
 
 const port = process.env.PORT || 3000;
