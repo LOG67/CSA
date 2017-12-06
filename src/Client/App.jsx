@@ -14,7 +14,7 @@ import ErrorBar from "./ErrorBar.jsx"
 
 import dummyData from './DummyData.json'
 
-const SERVER_URL = 'http://localhost:3000/'
+const SERVER_URL = 'https://csa-server.herokuapp.com/'
 
 class App extends Component {
     constructor(props) {
