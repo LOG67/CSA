@@ -1,102 +1,97 @@
-import React, {Component} from 'react'
-import ReactDOM from 'react-dom'
-import * as firebase from 'firebase'
-import * as firebaseui from 'firebaseui'
-import axios from 'axios'
-import _ from 'lodash'
+    import React, {Component} from 'react'
+    import ReactDOM from 'react-dom'
+    import * as firebase from 'firebase'
+    import * as firebaseui from 'firebaseui'
+    import axios from 'axios'
+    import _ from 'lodash'
 
-import config from '../../config.js'
-import SearchBar from './SearchBar.jsx'
-import SideBar from './SideBar.jsx'
-import SearchResult from './SearchResult.jsx'
-import NavBar from './NavBar.jsx'
-import ErrorBar from "./ErrorBar.jsx"
+    import config from '../../config.js'
+    import SearchBar from './SearchBar.jsx'
+    import SideBar from './SideBar.jsx'
+    import SearchResult from './SearchResult.jsx'
+    import NavBar from './NavBar.jsx'
+    import ErrorBar from "./ErrorBar.jsx"
 
-import dummyData from './DummyData.json'
+    import dummyData from './DummyData.json'
 
-const SERVER_URL = 'http://localhost:3000/'
+    const SERVER_URL = 'http://localhost:3000/'
 
-class App extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            userID: '',
-            username: '',
-            query: {},
-            histories: [],
-            result: {},
-            errors: [],
-        }
-    }
-
-
-    componentDidMount() {
-        init(this)
-        auth()
-    }
-
-
-    // Event Handlers
-
-    onLogoutPressed() {
-        firebase.auth().signOut().then(() => {
-            this.setState({...this.state, username: ""})
-        }).catch(error => {
-            console.log("logout error")
-        })
-        auth()
-    }
-
-    onQueryChanged(query) {
-        this.setState({ ...this.state, query})
-    }
-
-    onSubmitPressed(errors) {
-        console.log("errors: " + errors)
-        this.setState({ ...this.state, errors })
-        if (errors.length > 0) {
-            return
+    class App extends Component {
+        constructor(props) {
+            super(props)
+            this.state = {
+                userID: '',
+                username: '',
+                query: {},
+                histories: [],
+                result: {},
+                errors: [],
+            }
         }
 
-        firebase.auth().currentUser.getIdToken(true).then(idToken => {
-            let url = SERVER_URL + 'query/symbol/' + this.state.query.companySymbol + '/from/' +
-            this.state.query.from + '/to/' + this.state.query.to + '/token/' + idToken
-            return axios.get(url)
-        }).then(res => {
-            this.setState({...this.state, result: res.data})
-        }).catch(function(error) {
-            console.log(error)
-        })
-    }
 
-    onHistorySelected(index) {
-        const result = this.state.histories[index]
-        const query = result.query
-        this.setState({ ...this.state, result, query })
-    }
-
-    onErrorDismissed() {
-        this.setState({...this.state, errors:[]})
-
-    }
-    /* objectSpread*/
-
-
-    render() {
-        var signedIn = false;
-        if (this.state.username.length === 0) {
-            signedIn = false;
-        } else {
-            signedIn = true;
+        componentDidMount() {
+            init(this)
+            auth()
         }
-        return (
-            <div>
-                <NavBar
-                    username={this.state.username}
-                    onLogoutPressed={() => this.onLogoutPressed()}
-                />
+
+
+        // Event Handlers
+
+        onLogoutPressed() {
+            firebase.auth().signOut().then(() => {
+                this.setState({...this.state, username: ""})
+
+            }).catch(error => {
+                console.log("logout error")
+            })
+            auth()
+        }
+
+        onQueryChanged(query) {
+            this.setState({ ...this.state, query})
+        }
+
+        onSubmitPressed(errors) {
+            console.log("errors: " + errors)
+            this.setState({ ...this.state, errors })
+            if (errors.length > 0) {
+                return
+            }
+
+            firebase.auth().currentUser.getIdToken(true).then(idToken => {
+                let url = SERVER_URL + 'query/symbol/' + this.state.query.companySymbol + '/from/' +
+                    this.state.query.from + '/to/' + this.state.query.to + '/token/' + idToken
+                return axios.get(url)
+            }).then(res => {
+                this.setState({...this.state, result: res.data})
+            }).catch(function(error) {
+                console.log(error)
+            })
+        }
+
+        onHistorySelected(index) {
+            const result = this.state.histories[index]
+            const query = result.query
+            this.setState({ ...this.state, result, query })
+        }
+
+        onErrorDismissed() {
+            this.setState({...this.state, errors:[]})
+
+        }
+        /* objectSpread*/
+
+
+        render() {
+            return (
                 <div>
-                    <ErrorBar  errors={this.state.errors}
+                    <NavBar
+                        username={this.state.username}
+                        onLogoutPressed={() => this.onLogoutPressed()}
+                    />
+                    <div>
+                        <ErrorBar  errors={this.state.errors}
                         dismiss={() => this.onErrorDismissed()}/>
                     </div>
                     <div className="container-fluid">
@@ -112,16 +107,13 @@ class App extends Component {
                                 </div>
                             </div>
                             <div className="col col-sm-9 ml-sm-auto col-md-10 bg-light text-dark">
-                                <div className=" mt-md-3"
-                                    style={signedIn ? {visibility: 'visible'} :
-                                                            {display: 'none'}}>
-                                    <SearchBar
-                                        query={this.state.query}
-                                        onSubmitPressed={(errors) => this.onSubmitPressed(errors)}
-                                        onQueryChanged={newQuery => this.onQueryChanged(newQuery)}
-                                    />
+                                <div className=" mt-md-3">
+                                <SearchBar
+                                    query={this.state.query}
+                                    onSubmitPressed={(errors) => this.onSubmitPressed(errors)}
+                                    onQueryChanged={newQuery => this.onQueryChanged(newQuery)}
+                                />
                                 </div>
-
                                 <hr/>
                                 <div className="row">
                                     <SearchResult
@@ -167,12 +159,11 @@ class App extends Component {
                     const historyObjects = snap.val() || {}
                     const unsortedHistories = _.values(historyObjects)
                     const histories = _.sortBy(unsortedHistories, ['date']).reverse()
-                    app.setState({ ...app.state, histories }, () => {
+                    app.setState({ ...app.state, histories, username: user.displayName }, () => {
                         if (_.isEmpty(app.state.result) && !_.isEmpty(app.state.histories)) {
                             app.setState({ ...app.state,
                                 result: histories[0],
                                 query: histories[0].query,
-                                username: user.displayName
                             })
                         }
                     })
@@ -193,29 +184,29 @@ class App extends Component {
     query: t.Query,
     result: t.Result,
     histories: [t.Result],
-}
+    }
 
-Result: {
-query: t.Query,
-quotes: [t.Quote],
-tone: t.Tone,
-date: t.String,
-}
+    Result: {
+    query: t.Query,
+    quotes: [t.Quote],
+    tone: t.Tone,
+    date: t.String,
+    }
 
-Query: {
-companySymbol: t.String,
-startDate: t.String,
-endDate: t.String,
-}
+    Query: {
+    companySymbol: t.String,
+    startDate: t.String,
+    endDate: t.String,
+    }
 
-Tone: {
-??
-}
+    Tone: {
+    ??
+    }
 
-Quote: {
-qDate: t.String,
-open: t.Number,
-close: t.Number,
-volume: t.Number,
-}
-*/
+    Quote: {
+    qDate: t.String,
+    open: t.Number,
+    close: t.Number,
+    volume: t.Number,
+    }
+    */
