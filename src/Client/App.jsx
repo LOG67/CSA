@@ -103,17 +103,27 @@ class App extends Component {
                     <div className="row">
                         <div className="col-md-4"></div>
                         <div className="col-md-4">
+
+
                             <div
                                 style={signedIn ? {display: 'none'} :
                                 {visibility: 'visible'}}
                                 id="firebaseui-auth-container">
-                                <br/><h2>About</h2><br/>
-                                <div className="" >
-                                    This webapp takes news articles from google finance within a designated time interval for a designated company and displays the writers' overall tone compiled from those articles.
-                                    Under the tone analyzer the stock market changes are shown on a day by day basis for the particular company.
-                                    When logged in, the sidebar to the left shows the user's search history. Each item's results can be reloaded into the webpage.
-                                </div> <br/>
+                            <br/><h2>About</h2><br/>
+                            <div className="" >
+                                This webapp takes news articles from google finance within a designated time interval for a designated company and displays the writers' overall tone compiled from those articles.
+                                Under the tone analyzer the stock market changes are shown on a day by day basis for the particular company.
+                                When logged in, the sidebar to the left shows the user's search history. Each item's results can be reloaded into the webpage.
+                            </div> <br/>
+
+                            <div
+                                style={signedIn ? {display: 'none'} :
+                                {visibility: 'visible'}}
+                                id="firebaseui-auth-container">
+
                             </div>
+                        </div>
+
                         </div>
                         <div className="col-md-4"></div>
                     </div>
