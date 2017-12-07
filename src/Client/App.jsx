@@ -167,6 +167,7 @@ class App extends Component {
         }
     }
 
+var authUIInstance;
 
     function auth() {
 
@@ -183,9 +184,14 @@ class App extends Component {
         }
 
         // Initialize the FirebaseUI Widget using Firebase.
-        var ui = new firebaseui.auth.AuthUI(firebase.auth())
+        if (!authUIInstance) {
+            authUIInstance = new firebaseui.auth.AuthUI(firebase.auth())
+        } else {
+            authUIInstance.reset()            
+        }
+
         // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig)
+        authUIInstance.start('#firebaseui-auth-container', uiConfig)
     }
 
     function init(app) {
