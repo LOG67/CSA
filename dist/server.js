@@ -127,13 +127,25 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', function (req, r
 
     // check the company
     if (!__WEBPACK_IMPORTED_MODULE_7__companies__["a" /* default */].includes(companySymbol)) {
-        res.status(404).send("No company symbol: " + companySymbol).end();
+        var error = "Not a valid NAsDAQ company symbol: " + companySymbol;
+        console.log(error);
+        res.status(404).send({ error: error }).end();
         return;
     }
 
-    // TODO: should check the dates
-    //
-    //
+    if (!__WEBPACK_IMPORTED_MODULE_2_moment___default()(req.params.from, 'MM-DD-YYYY').isValid()) {
+        var _error = "Not a valid from date: " + req.params.from;
+        console.log(_error);
+        res.status(404).send({ error: _error }).end();
+        return;
+    }
+
+    if (!__WEBPACK_IMPORTED_MODULE_2_moment___default()(req.params.to, 'MM-DD-YYYY').isValid()) {
+        var _error2 = "Not a valid to date: " + req.params.to;
+        console.log(_error2);
+        res.status(404).send({ error: _error2 }).end();
+        return;
+    }
 
     __WEBPACK_IMPORTED_MODULE_4_firebase_admin__["auth"]().verifyIdToken(req.params.token).then(function (decodedToken) {
         var symbol = 'NASDAQ:' + companySymbol;
@@ -167,26 +179,28 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', function (req, r
                 tones: 'emotion'
             };
 
-            toneAnalyzer.tone(toneParams, function (toneError, toneResponse) {
-                if (toneError) {
-                    console.log(toneError);
-                    res.status(404).send(toneError).end();
+            toneAnalyzer.tone(toneParams, function (serverError, toneResponse) {
+                if (serverError) {
+                    console.log(serverError);
+                    res.status(404).send({ error: "Something went wrong in the server!", serverError: serverError }).end();
                     return;
                 } else {
-                    // console.log(toneResponse)
                     var tones = toneResponse.document_tone.tone_categories[0].tones;
-                    console.log(tones);
-                    result = _extends({}, result, { tones: tones
-                        // console.log(result)
-                    });db.ref('users/' + decodedToken.uid + '/histories').push().set(result);
+                    result = _extends({}, result, { tones: tones });
+
+                    db.ref('users/' + decodedToken.uid + '/histories').push().set(result);
                     res.send(result).end();
                 }
             });
-        }).catch(function (reason) {
-            res.status(404).send(reason).end();
+        }).catch(function (serverError) {
+            var error = "Something went wrong in the query!";
+            console.log(serverError);
+            res.status(404).send({ error: error, serverError: serverError }).end();
+            return;
         });
-    }).catch(function (error) {
-        res.status(403).send(error).end();
+    }).catch(function (serverError) {
+        console.log(serverError);
+        res.status(403).send({ error: "Athentication Failed! relogin, please.", serverError: serverError }).end();
     });
 });
 
