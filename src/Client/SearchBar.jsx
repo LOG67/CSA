@@ -38,32 +38,42 @@ export default class SearchBar extends Component {
         this.props.onQueryChanged({ ...this.props.query, to })
     }
 
+
     render() {
         let { companySymbol, from, to } = this.props.query
         return (
             <form onSubmit={e => this.handleSubmit(e)}>
                 <div className="form-row">
-                        <input className="form-control col-4"
-                            type="text"
-                            value={companySymbol}
-                            onChange={e => this.handleChangeName(e)}
-                            placeholder='Company Name'/>
+                    <input className="form-control col-4"
+                           type="text"
+                           value={companySymbol}
+                           onChange={e => this.handleChangeName(e)}
+                           placeholder='Company Name'/>
 
-                        <input className="form-control col"
-                            type="text"
-                            value={from}
-                            onChange={e => this.handleChangeFromDate(e)}
-                            placeholder='From MM/DD/YYYY'/>
+                    <div className="form-group col">
+                        <div className='input-group date'>
+                            <input className="form-control "
+                                   type="text"
+                                   value={from}
+                                   onChange={e => this.handleChangeFromDate(e)}
+                                   placeholder='From MM/DD/YYYY'
+                                   id="date"/>
+                        </div>
+                    </div>
 
-                        <input className="form-control col"
-                            type="text"
-                            value={to}
-                            onChange={e => this.handleChangeToDate(e)}
-                            placeholder='To MM/DD/YYYY'/>
-
-                        <button className="btn btn-dark text-center ml-md-4 mr-md-2" type="submit">Search</button>
+                    <div class="form-group col">
+                        <div class='input-group date' >
+                            <input className="form-control "
+                                   type="text"
+                                   value={to}
+                                   onChange={e => this.handleChangeToDate(e)}
+                                   placeholder='To MM/DD/YYYY'
+                                   id="date2"/>
+                        </div>
+                    </div>
+                    <button className="btn btn-dark text-center ml-md-4 mr-md-2" type="submit">Search</button>
                 </div>
             </form>
-                    )
-                }
-            }
+        )
+    }
+}
