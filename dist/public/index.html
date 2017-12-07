@@ -6,10 +6,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.3/moment.min.js" integrity="sha256-/As5lS2upX/fOCO/h/5wzruGngVW3xPs3N8LN4FkA5Q=" crossorigin="anonymous"></script>
-
-    <title>CSA</title>
+    <script src="js/bootstrap-datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css"/>
+    <title>Company Sentiment Analyzer</title>
 </head>
 <body class="bg-light">
   <div id="app"></div>
   <script src="./bundle.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#date').datetimepicker({format:"MM-DD-YYYY"});
+        $('#date2').datetimepicker({format:"MM-DD-YYYY"});
+    });
+</script>
 </body>
