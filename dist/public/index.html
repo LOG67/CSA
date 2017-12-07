@@ -11,12 +11,18 @@
     <title>Company Sentiment Analyzer</title>
 </head>
 <body class="bg-light">
+    <style>
+        ul.firebaseui-idp-list {
+            list-style: none;
+        }
+    </style>
   <div id="app"></div>
   <script src="./bundle.js"></script>
-<script type="text/javascript">
-    $(function () {
-        $('#date').datetimepicker({format:"MM-DD-YYYY"});
-        $('#date2').datetimepicker({format:"MM-DD-YYYY"});
-    });
-</script>
+    <script type="text/javascript">
+        $(function () {
+            $('#date').datetimepicker({format:"MM-DD-YYYY"});
+            $('#date2').datetimepicker({format:"MM-DD-YYYY"});
+            $('span.firebaseui-idp-text.firebaseui-idp-text-short').remove();
+        });
+    </script>
 </body>

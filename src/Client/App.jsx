@@ -107,6 +107,12 @@ class App extends Component {
                                 style={signedIn ? {display: 'none'} :
                                 {visibility: 'visible'}}
                                 id="firebaseui-auth-container">
+                                <br/><h2>About</h2><br/>
+                                <div className="" >
+                                    This webapp takes news articles from google finance within a designated time interval for a designated company and displays the writers' overall tone compiled from those articles.
+                                    Under the tone analyzer the stock market changes are shown on a day by day basis for the particular company.
+                                    The sidebar on the left shows the user's search history. Each item's results can be reloaded into the webpage.
+                                </div> <br/>
                             </div>
                         </div>
                         <div className="col-md-4"></div>
@@ -155,7 +161,6 @@ class App extends Component {
             signInOptions: [
                 // Leave the lines as is for the providers you want to offer your users.
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                firebase.auth.EmailAuthProvider.PROVIDER_ID,
             ],
             callbacks: {
                 signInSuccess: function (currentUser, credential, redirectUrl) {
