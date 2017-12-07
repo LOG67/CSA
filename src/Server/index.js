@@ -39,13 +39,25 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
 
     // check the company
     if (!companies.includes(companySymbol)) {
-        res.status(404).send("No company symbol: " + companySymbol).end()
+        let error = "Not a valid NAsDAQ company symbol: " + companySymbol
+        console.log(error)
+        res.status(404).send({ error }).end()
         return
     }
 
-    // TODO: should check the dates
-    //
-    //
+    if (!moment(req.params.from, 'MM-DD-YYYY').isValid()) {
+        let error = "Not a valid from date: " + req.params.from
+        console.log(error)
+        res.status(404).send({ error }).end()
+        return
+    }
+
+    if (!moment(req.params.to, 'MM-DD-YYYY').isValid()) {
+        let error = "Not a valid to date: " + req.params.to
+        console.log(error)
+        res.status(404).send({ error }).end()
+        return
+    }
 
     admin.auth().verifyIdToken(req.params.token).then(decodedToken => {
         let symbol = 'NASDAQ:' + companySymbol
@@ -75,26 +87,28 @@ app.get('/query/symbol/:symbol/from/:from/to/:to/token/:token', (req, res) => {
                 tones: 'emotion',
             }
 
-            toneAnalyzer.tone(toneParams, (toneError, toneResponse) => {
-                if (toneError) {
-                    console.log(toneError)
-                    res.status(404).send(toneError).end()
+            toneAnalyzer.tone(toneParams, (serverError, toneResponse) => {
+                if (serverError) {
+                    console.log(serverError)
+                    res.status(404).send({ error: "Something went wrong in the server!", serverError }).end()
                     return
                 } else {
-                    // console.log(toneResponse)
                     let tones = toneResponse.document_tone.tone_categories[0].tones
-                    console.log(tones)
                     result = { ...result, tones }
-                    // console.log(result)
+
                     db.ref('users/' + decodedToken.uid + '/histories').push().set(result)
                     res.send(result).end()
                 }
             })
-        }).catch(reason => {
-            res.status(404).send(reason).end()
+        }).catch(serverError => {
+            let error = "Something went wrong in the query!"
+            console.log(serverError)
+            res.status(404).send({ error, serverError }).end()
+            return
         })
-    }).catch(error => {
-        res.status(403).send(error).end()
+    }).catch(serverError => {
+        console.log(serverError)
+        res.status(403).send({ error: "Athentication Failed! relogin, please.", serverError }).end()
     })
 })
 

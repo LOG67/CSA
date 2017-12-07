@@ -13,10 +13,10 @@ export default class SearchResult extends Component {
         return (
                 <div className="container-fluid">
                     <div className="row">
-                        {radarChart}
+                        {lineChart}
                     </div>
                     <div className="row">
-                        {lineChart}
+                        {radarChart}
                     </div>
                 </div>
 
