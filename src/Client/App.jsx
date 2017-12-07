@@ -111,7 +111,7 @@ class App extends Component {
                                 <div className="" >
                                     This webapp takes news articles from google finance within a designated time interval for a designated company and displays the writers' overall tone compiled from those articles.
                                     Under the tone analyzer the stock market changes are shown on a day by day basis for the particular company.
-                                    The sidebar on the left shows the user's search history. Each item's results can be reloaded into the webpage.
+                                    When logged in, the sidebar to the left shows the user's search history. Each item's results can be reloaded into the webpage.
                                 </div> <br/>
                             </div>
                         </div>
