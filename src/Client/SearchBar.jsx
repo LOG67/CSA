@@ -13,10 +13,10 @@ export default class SearchBar extends Component {
         if (!companies.includes(companySymbol)) {
             errors.push('Provide a valid company symbol!')
         }
-        if (!moment(from).isValid()) {
+        if (!moment(from, 'MM-DD-YYYY').isValid()) {
             errors.push('Provide a valid start date!')
         }
-        if (!moment(to).isValid()) {
+        if (!moment(to, 'MM-DD-YYYY').isValid()) {
             errors.push('Provide a valid end date!')
         }
         this.props.onSubmitPressed(errors)
