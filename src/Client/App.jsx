@@ -14,7 +14,8 @@ import ErrorBar from "./ErrorBar.jsx"
 
 import dummyData from './DummyData.json'
 
-const SERVER_URL = 'https://csa-server.herokuapp.com/'
+// const SERVER_URL = 'https://csa-server.herokuapp.com/'
+const SERVER_URL = 'http://localhost:3000/'
 
 class App extends Component {
     constructor(props) {
@@ -52,12 +53,13 @@ class App extends Component {
         this.setState({ ...this.state, query})
     }
 
-    onSubmitPressed(errors) {
+    onSubmitPressed(query, errors) {
         console.log("errors: " + errors)
-        this.setState({ ...this.state, errors })
+        this.setState({ ...this.state, errors, query })
         if (errors.length > 0) {
             return
         }
+
 
         firebase.auth().currentUser.getIdToken(true).then(idToken => {
             let url = SERVER_URL + 'query/symbol/' + this.state.query.companySymbol + '/from/' +
@@ -68,6 +70,7 @@ class App extends Component {
         }).catch(function(error) {
             console.log(error)
         })
+
     }
 
     onHistorySelected(index) {
@@ -135,7 +138,7 @@ class App extends Component {
                                 <div className=" mt-md-3">
                                     <SearchBar
                                         query={this.state.query}
-                                        onSubmitPressed={(errors) => this.onSubmitPressed(errors)}
+                                        onSubmitPressed={(query, errors) => this.onSubmitPressed(query, errors)}
                                         onQueryChanged={newQuery => this.onQueryChanged(newQuery)}
                                     />
                                 </div>

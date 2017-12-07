@@ -7,7 +7,9 @@ import companies from '../../companies.js'
 export default class SearchBar extends Component {
 
     handleSubmit(e) {
-        let { companySymbol, to, from } = this.props.query
+        let from = $('#date').val()
+        let to = $('#date2').val()
+        let companySymbol = this.props.query.companySymbol
         // first validate the inputs
         var errors = []
         if (!companies.includes(companySymbol)) {
@@ -19,13 +21,15 @@ export default class SearchBar extends Component {
         if (!moment(to, 'MM-DD-YYYY').isValid()) {
             errors.push('Provide a valid end date!')
         }
-        this.props.onSubmitPressed(errors)
+        this.props.onSubmitPressed({ to, from, companySymbol }, errors)
         e.preventDefault()
     }
 
     handleChangeName(e) {
         let companySymbol = e.target.value.toUpperCase()
-        this.props.onQueryChanged({ ...this.props.query, companySymbol })
+        let from = $('#date').val()
+        let to = $('#date2').val()
+        this.props.onQueryChanged({ from, to, companySymbol })
     }
 
     handleChangeFromDate(e) {
@@ -55,8 +59,6 @@ export default class SearchBar extends Component {
                             <input className="form-control "
                                    type="text"
                                    value={from}
-                                   onChange={e => this.handleChangeFromDate(e)}
-                                   placeholder='From MM/DD/YYYY'
                                    id="date"/>
                         </div>
                     </div>
@@ -66,8 +68,6 @@ export default class SearchBar extends Component {
                             <input className="form-control "
                                    type="text"
                                    value={to}
-                                   onChange={e => this.handleChangeToDate(e)}
-                                   placeholder='To MM/DD/YYYY'
                                    id="date2"/>
                         </div>
                     </div>
