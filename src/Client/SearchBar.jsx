@@ -44,13 +44,13 @@ export default class SearchBar extends Component {
         return (
             <form onSubmit={e => this.handleSubmit(e)}>
                 <div className="form-row">
-                    <input className="form-control col-4"
+                    <input className="form-control col"
                            type="text"
                            value={companySymbol}
                            onChange={e => this.handleChangeName(e)}
                            placeholder='Company Name'/>
 
-                    <div className="form-group col">
+                    <div className="form-control col">
                         <div className='input-group date'>
                             <input className="form-control "
                                    type="text"
@@ -61,7 +61,7 @@ export default class SearchBar extends Component {
                         </div>
                     </div>
 
-                    <div class="form-group col">
+                    <div class="form-control col">
                         <div class='input-group date' >
                             <input className="form-control "
                                    type="text"

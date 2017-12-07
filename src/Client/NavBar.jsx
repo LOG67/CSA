@@ -18,11 +18,11 @@ export default class NavBar extends Component {
             <nav
                 className="navbar navbar-light navbar-fixed-top"
                 style={{backgroundColor:"#ff8533"}}>
-                <a
+                <h4
                     className="navbar-brand"
                     href="#">
                     Company Sentiment Analyzer
-                </a>
+                </h4>
                 <div style={showLogout ? {visibility: 'visible'} :
                                         {display: 'none'}}>
                     <form>
