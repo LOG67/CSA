@@ -13,10 +13,10 @@ export default class SearchResult extends Component {
         return (
                 <div className="container-fluid">
                     <div className="row">
-                        {lineChart}
+                        {radarChart}
                     </div>
                     <div className="row">
-                        {radarChart}
+                        {lineChart}
                     </div>
                 </div>
 
@@ -38,7 +38,11 @@ function generateRadarChart(tones) {
         ],
     }
     return <Radar
-        options={{ responsive: true }}
+        options={{ responsive: true,
+        title:{
+            display:true,
+            text:'Emotion Analysis For The Past Few Days'
+        } }}
         labels={tones.map(t => t.tone_name)}
         data= {data}
     />
@@ -49,7 +53,7 @@ function generateLineChart(quotes) {
         responsive: true,
         title:{
             display:true,
-            text:'Stock Quotes'
+            text:'Stock Quotes For The Specified Period'
         },
         tooltips: {
             mode: 'index',
